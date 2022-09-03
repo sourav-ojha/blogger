@@ -21,6 +21,42 @@ function decodeJWT(token) {
     return decoded_token.username;
 }
 
+//Get all posts
+
+//No authentication required to view public posts
+
+router.get("/blog", async (req, res) => {
+    //Get list of all published posts. Personal/private posts are not shown
+
+    try {
+        const posts = await Post.find({ is_published: true }).select({ _id: 0, __v: 0 });
+        res.status(200).send(posts);
+    } catch (err) {
+        return res.status(500).send({ msg: "Something went wrong!" });
+    }
+});
+
+//Get a specific post
+//No authentication required to view public posts
+router.get("/:post_id/", async (req, res) => {
+    let post_id = sanitize(req.params.post_id);
+
+    if (post_id) {
+        try {
+            let post = await Post.findOne({ post_id: post_id, is_published: true }).select({ _id: 0, __v: 0 });
+            if (post) {
+                res.status(200).send(post);
+            } else {
+                res.status(404).send({ msg: "Post not found!" });
+            }
+        } catch (err) {
+            return res.status(500).send({ msg: "Something went wrong!" });
+        }
+    } else {
+        return res.status(400).send({ msg: "Please provide a post url" });
+    }
+});
+
 // Create Post
 router.post("/blog", auth, async (req, res) => {
     let { title, content, keywords, category } = sanitize(req.body); // Sanitize the data to prevent injection attacks
