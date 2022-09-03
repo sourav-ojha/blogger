@@ -6,10 +6,38 @@ import { Toast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
 import { usePost } from "../../context/postContext";
 import TextEditor from "./TextEditor";
+import * as filestack from "filestack-js";
+
+const client = filestack.init(import.meta.env.VITE_FILE_STACK_API_KEY);
 
 const PostEditor = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  const [state, setState] = React.useState({
+    title: "",
+    content: "",
+    keywords: "",
+    category: "",
+    coverImage: "",
+  });
+
+  const options = {
+    accept: "image/*",
+    maxFiles: 1,
+    fromSources: ["local_file_system", "url"],
+    onFileUploadFinished: (res) => {
+      console.log(res);
+      setState({ ...state, coverImage: res.url });
+    },
+    onFileUploadFailed: (res) => {
+      console.log(res);
+      Toast.fire({
+        icon: "error",
+        title: "Image upload failed",
+      });
+    },
+  };
 
   useEffect(() => {
     if (!user) {
@@ -17,12 +45,6 @@ const PostEditor = () => {
     }
   });
 
-  const [state, setState] = React.useState({
-    title: "",
-    content: "",
-    keywords: "",
-    category: "",
-  });
   const { createPost, isError, errorMessage, successMessage } = usePost();
 
   const [isCategoryEnabled, setIsCategoryEnabled] = React.useState(false);
@@ -49,6 +71,7 @@ const PostEditor = () => {
       content: state.content,
       keywords: state.keywords.split(","),
       category: state.category,
+      coverImage: state.coverImage,
     };
     createPost(payload);
   };
@@ -94,16 +117,34 @@ const PostEditor = () => {
             >
               Save
             </button>
-            {/* publish button */}
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
               Publish
-            </button>
+            </button> */}
           </div>
         </div>
       </nav>
       {/* container max-width=1200px margin-auto */}
       <div className="container mx-auto mt-5 flex flex-col gap-3">
-        {/* upload cover pic */}
+        {/* upload cover pic btn with popover menu  */}
+        <button
+          className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
+          onClick={() => {
+            client.picker(options).open();
+          }}
+        >
+          Upload Cover Image
+        </button>
+        {/* preview image */}
+        {!!state.coverImage && (
+          <div>
+            <img
+              src={state.cover_image}
+              alt="cover_image"
+              className="w-full h-96 object-cover"
+            />
+          </div>
+        )}
+
         {/* category and keyword enabling button */}
         <div className="flex  gap-2">
           {!isCategoryEnabled && (

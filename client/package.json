@@ -12,6 +12,7 @@
     "autoprefixer": "^10.4.8",
     "axios": "^0.27.2",
     "easymde": "^2.17.0",
+    "filestack-js": "^3.25.0",
     "flowbite": "^1.5.3",
     "flowbite-react": "^0.1.10",
     "moment": "^2.29.4",
