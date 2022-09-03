@@ -4,15 +4,27 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { MdOutlineSearch } from "react-icons/md";
+import { BiSave } from "react-icons/bi";
+import { usePost } from "../../context/postContext";
 
 const Appbar = () => {
-  // const user = {
-  //   name: "John Doe",
-  //   email: "sourav@dev.com",
-  // };
   const { logout, user, token } = useAuth();
+  const { searchPosts } = usePost();
   const handleLogout = () => {
     logout();
+  };
+
+  function debounce(func, timeout = 300) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, timeout);
+    };
+  }
+  const handleSearch = (e) => {
+    searchPosts(e.target.value);
   };
 
   return (
@@ -38,6 +50,7 @@ const Appbar = () => {
               type="text"
               className="w-full h-12 pl-10 pr-4 rounded-2xl border border-gray-300 focus:border-blue-500 focus:outline-none dark:bg-gray-800 dark:border-gray-700 dark:text-white"
               placeholder="Search for tags, article and many more "
+              onChange={debounce((e) => handleSearch(e), 500)}
             />
           </div>
         </div>

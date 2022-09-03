@@ -50,6 +50,10 @@ const Register = () => {
     if (!status) {
       setError(message);
     } else {
+      Toast.fire({
+        icon: "success",
+        title: message,
+      });
       navigate("/signin");
     }
   };

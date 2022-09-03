@@ -66,7 +66,7 @@ const AuthProvider = ({ children }) => {
           type: "LOGIN",
           payload: { token: res.data.token },
         });
-        return { status: true };
+        return { status: true,message:res.data.msg };
       })
       .catch((err) => {
         console.log(err);
@@ -83,7 +83,7 @@ const AuthProvider = ({ children }) => {
       .then((res) => {
         console.log(res);
         dispatch({ type: "REGISTER", payload: { token: res.data.token } });
-        return { status: true };
+        return { status: true, message: res.data.msg };
       })
       .catch((err) => {
         console.log(err);

@@ -21,5 +21,19 @@ const likePost = async (post_id) => {
   return await httpClient(`${API_URL}/blog/${post_id}/like`, "POST");
 };
 
-let postApi = { getPosts, getPost, createPost, deletePost, likePost };
+const searchPosts = async (search) => {
+  return await httpClientWithOutToken(
+    `${API_URL}/search?query=${search}`,
+    "GET"
+  );
+};
+
+let postApi = {
+  getPosts,
+  getPost,
+  createPost,
+  deletePost,
+  likePost,
+  searchPosts,
+};
 export default postApi;

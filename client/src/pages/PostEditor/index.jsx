@@ -1,12 +1,22 @@
 import React from "react";
 import { useEffect } from "react";
 import { MdCancel } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Toast } from "../../components/Toast";
+import { useAuth } from "../../context/AuthContext";
 import { usePost } from "../../context/postContext";
 import TextEditor from "./TextEditor";
 
 const PostEditor = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/signin");
+    }
+  });
+
   const [state, setState] = React.useState({
     title: "",
     content: "",

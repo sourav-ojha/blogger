@@ -91,6 +91,17 @@ const PostProvider = ({ children }) => {
     }
     clearMessage();
   };
+
+  const searchPosts = async (q) => {
+    try {
+      const res = await postApi.searchPosts(q);
+      dispatch({ type: "GET_POSTS", payload: res.data });
+    } catch (err) {
+      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
+    }
+    clearMessage();
+  };
+
   const getUpdatedPost = async (id) => {
     try {
       const res = await postApi.getPost(id);
@@ -138,6 +149,7 @@ const PostProvider = ({ children }) => {
         getPosts,
         likePost,
         createPost,
+        searchPosts,
       }}
     >
       {children}
