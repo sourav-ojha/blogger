@@ -23,9 +23,9 @@ function decodeJWT(token) {
 
 // Create Post
 router.post("/blog", auth, async (req, res) => {
-    let { title, content, keywords } = sanitize(req.body); // Sanitize the data to prevent injection attacks
+    let { title, content, keywords, category } = sanitize(req.body); // Sanitize the data to prevent injection attacks
 
-    if (title && content && keywords) {
+    if (title && content && keywords && category) {
         // Create a new post
 
         try {
@@ -43,6 +43,7 @@ router.post("/blog", auth, async (req, res) => {
                 content: content,
                 post_id: post_id,
                 keywords: keywords,
+                category: category,
                 full_name: user_data.full_name,
                 username: user_data.username,
                 is_published: true,
@@ -59,7 +60,33 @@ router.post("/blog", auth, async (req, res) => {
             return res.status(400).json({ msg: "Something went wrong!" });
         }
     } else {
-        return res.status(400).send({ msg: "Please provide a title, content, and keywords!" });
+        return res.status(400).send({ msg: "Please provide a title, content, category and keywords!" });
+    }
+});
+
+//Delete Post
+
+router.delete("/blog/:post_id", auth, async (req, res) => {
+    let post_id = sanitize(req.params.post_id); // Sanitize the data to prevent injection attacks
+
+    if (post_id) {
+        try {
+            //Verify if the authenticated user is the owner of the post
+
+            let actual_owner_of_post = await Post.findOne({ username: decodeJWT(req.header("Authorization").split(" ")[1]), post_id: post_id });
+
+            if (actual_owner_of_post) {
+                //Deelte post from post collection
+                await Post.deleteOne({ post_id: post_id });
+                res.status(200).json({ msg: "Post deleted successfully" });
+            } else {
+                return res.json({ msg: "You are not the owner of this post!" });
+            }
+        } catch (err) {
+            return res.status(400).json({ msg: "Something went wrong!" });
+        }
+    } else {
+        return res.status(400).send({ msg: "Please provide a post id!" });
     }
 });
 

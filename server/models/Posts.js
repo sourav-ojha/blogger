@@ -8,6 +8,7 @@ const postData = mongoose.Schema({
     is_published: Boolean, //This is for the admin to publish/private the post
     keywords: [], //Helps in Search based upon keywords and title
     username: String,
+    category: String,
     full_name: String,
     time_to_read: Number,
     published_date: Date,
