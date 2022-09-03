@@ -49,6 +49,17 @@ router.get("/blog", async (req, res) => {
     }
 });
 
+//Show private posts to authorized users
+
+router.get("/blog/private", auth, async (req, res) => {
+    try {
+        const username = decodeJWT(req.header("Authorization").split(" ")[1]);
+        const posts = await Post.find({ is_published: false, username: username }).select({ _id: 0, __v: 0 });
+        res.status(200).send(posts);
+    } catch (err) {
+        res.status(500).json({ msg: "Something went wrong!" });
+    }
+});
 //----------------------- Logic to specific post content -----------------------------
 // Get a specific post
 // Send unique post id
@@ -117,7 +128,50 @@ router.post("/blog", auth, async (req, res) => {
     }
 });
 
-//Delete Post
+// Update Post
+
+router.patch("/blog/:post_id", auth, async (req, res) => {
+    let post_id = sanitize(req.params.post_id);
+    let { title, content, keywords, category, is_published } = sanitize(req.body);
+
+    if ((post_id && title && content && keywords && category, is_published)) {
+        try {
+            let url = title.replace(/\s+/g, "-");
+            url = "/blog/" + post_id.toString() + "/" + url;
+            let time_to_read = Math.round(content.split(" ").length / 200);
+
+            await Post.findOneAndUpdate(
+                { post_id: post_id },
+                {
+                    title: title,
+                    url: url,
+                    content: content,
+                    keywords: keywords,
+                    category: category,
+                    is_published: is_published,
+                    time_to_read: time_to_read,
+                    published_date: Date.now(),
+                },
+                (err) => {
+                    if (err) {
+                        return res.status(400).json({ msg: "Something went wrong" });
+                    } else {
+                        return res.status(200).json({ msg: "Post updated successfully" });
+                    }
+                }
+            );
+        } catch (err) {
+            return res.status(400).json({ msg: "Something went wrong!" });
+        }
+    } else {
+        return res.status(400).json({ msg: "Please provide a title, content, category and keywords!" });
+    }
+});
+
+// ----------------------- Logic to delete post -----------------------------
+//Check user authentication
+// Validate authentication user is actual owner of the post
+// Delete post from database identified by post id
 
 router.delete("/blog/:post_id", auth, async (req, res) => {
     let post_id = sanitize(req.params.post_id); // Sanitize the data to prevent injection attacks
@@ -154,6 +208,8 @@ router.get("/search", async (req, res) => {
 
     if (search_query) {
         try {
+            // Used regex to search for the query in the title and keywords
+
             let posts = await Post.find({ $or: [{ title: RegExp(search_query, "i") }, { keywords: RegExp(search_query, "i") }], is_published: true }).select({ _id: 0, __v: 0 });
             if (posts.length > 0) {
                 res.status(200).send(posts);

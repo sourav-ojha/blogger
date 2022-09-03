@@ -10,7 +10,7 @@ const postData = mongoose.Schema({
     username: String,
     category: String,
     full_name: String,
-    like_count: Number,
+    like_count: { type: Number, default: 0 },
     time_to_read: Number,
     published_date: Date,
 });
