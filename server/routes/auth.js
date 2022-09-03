@@ -55,7 +55,7 @@ router.post("/signup", limiter, async (req, res) => {
             return res.status(400).json({ msg: "All fields are required" });
         }
     } catch (err) {
-        res.status(500).json({ error: "Something went wrong!" });
+        res.status(500).json({ msg: "Something went wrong!" });
     }
 });
 
@@ -92,8 +92,10 @@ router.post("/signin", limiter, async (req, res) => {
             return res.status(400).json({ msg: "All fields are required" });
         }
     } catch (err) {
-        res.status(500).json({ error: "Something went wrong!" });
+        res.status(500).json({ msg: "Something went wrong!" });
     }
 });
+
+// Logout and Destroy Token
 
 module.exports = router;

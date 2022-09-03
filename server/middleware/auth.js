@@ -9,14 +9,14 @@ module.exports = (req, res, next) => {
         token = token.split(" ")[1];
         jwt.verify(token, JWT_SECRET, (err) => {
             if (err) {
-                res.status(401).json({ error: "Your authentication token is invalid!" });
+                res.status(401).json({ msg: "Your authentication token is invalid!" });
             } else {
                 next();
             }
         });
     } catch {
         res.status(401).json({
-            error: "Invalid Request!",
+            msg: "Invalid Request!",
         });
     }
 };
