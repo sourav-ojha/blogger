@@ -12,7 +12,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Protects against spam by rate limiting the API
 
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: "Too many attempts!" });
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, message: "Too many request!" });
 
 //Signup Route
 
@@ -95,7 +95,5 @@ router.post("/signin", limiter, async (req, res) => {
         res.status(500).json({ msg: "Something went wrong!" });
     }
 });
-
-// Logout and Destroy Token
 
 module.exports = router;
