@@ -1,7 +1,8 @@
 // context for auth state
 import { API_URL } from "../constants";
 import React, { createContext, useReducer } from "react";
-import { httpClientWithOutToken } from "../utils/httpClient";
+import { httpClient, httpClientWithOutToken } from "../utils/httpClient";
+import { useEffect } from "react";
 
 // make a useAuth hook
 const AuthContext = createContext();
@@ -17,9 +18,14 @@ const reducer = (state, action) => {
         ...state,
         token: action.payload.token,
       };
+    case "SET_USER":
+      return {
+        ...state,
+        user: action.payload.user,
+      };
     case "LOGOUT":
       localStorage.removeItem("token");
-      return { ...state, token: null };
+      return { ...state, token: null, user: null };
     default:
       return state;
   }
@@ -33,7 +39,25 @@ function getTokenFromStorage() {
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
     token: getTokenFromStorage(),
+    user: null,
   });
+
+  useEffect(() => {
+    if (state.token && !state.user) {
+      getUserDetails();
+    }
+  }, [state.token, state.user]);
+
+  const getUserDetails = async () => {
+    await httpClient(`${API_URL}/user_details`)
+      .then((res) => {
+        dispatch({ type: "SET_USER", payload: { user: res.data } });
+      })
+      .catch((err) => {
+        dispatch({ type: "LOGOUT" });
+        console.log(err);
+      });
+  };
 
   const login = (body) => {
     return httpClientWithOutToken(`${API_URL}/signin`, "POST", body)

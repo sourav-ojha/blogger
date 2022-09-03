@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const httpClientWithOutToken = async (url, method, body) => {
+const httpClientWithOutToken = async (url, method, body={}) => {
   return await axios({
     method: method,
     url: url,
@@ -11,7 +11,7 @@ const httpClientWithOutToken = async (url, method, body) => {
   });
 };
 
-const httpClient = async (url, method, body) => {
+const httpClient = async (url, method, body={}) => {
   return await axios({
     method: method,
     url: url,

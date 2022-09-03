@@ -6,11 +6,14 @@ import { Link } from "react-router-dom";
 import { MdOutlineSearch } from "react-icons/md";
 
 const Appbar = () => {
-  const user = {
-    name: "John Doe",
-    email: "sourav@dev.com",
+  // const user = {
+  //   name: "John Doe",
+  //   email: "sourav@dev.com",
+  // };
+  const { logout, user, token } = useAuth();
+  const handleLogout = () => {
+    logout();
   };
-  const { logout } = useAuth();
 
   return (
     <nav className="bg-white border-gray-200 px-2 sm:px-4 py-4 rounded dark:bg-gray-900">
@@ -48,15 +51,44 @@ const Appbar = () => {
             }
           >
             <Dropdown.Header>
-              <span className="block text-sm">{user.name}</span>
-              <span className="block truncate text-sm font-medium">
-                {user.email}
-              </span>
+              {user ? (
+                <>
+                  <span className="block text-md">{user.full_name}</span>
+                  <span className="block text-sm">( {user.username} )</span>
+                  <span className="block truncate text-sm font-medium">
+                    {user.email}
+                  </span>
+                </>
+              ) : (
+                <>
+                  {/* please login  */}
+                  <span className="block text-sm">Please Login</span>
+                  <span className="block truncate text-sm font-medium">
+                    to access your profile
+                  </span>
+                  {/* divider */}
+                  <div className="my-2 border-t border-gray-200"></div>
+                  <div className="flex gap-2 justify-center">
+                    <Link to="/signin" className="mt-2 ">
+                      <button className="border p-2 px-4 bg-blue-500 text-white ">
+                        signin
+                      </button>
+                    </Link>
+                    <Link to="/signup" className="mt-2 ">
+                      <button className="border p-2 px-4 bg-white text-blue-500 ">
+                        signup
+                      </button>
+                    </Link>
+                  </div>
+                </>
+              )}
             </Dropdown.Header>
             {/* <Dropdown.Item>Dashboard</Dropdown.Item> */}
             {/* <Dropdown.Item>Settings</Dropdown.Item> */}
             {/* <Dropdown.Item>Earnings</Dropdown.Item> */}
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            {token && (
+              <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
+            )}
           </Dropdown>
           {/* <Navbar.Toggle /> */}
         </div>
