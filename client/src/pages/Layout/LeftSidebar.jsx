@@ -2,11 +2,11 @@ import React from "react";
 import { BsNewspaper } from "react-icons/bs";
 import { NavLink } from "react-router-dom";
 
-const Menu = ({ Icon, label }) => {
+const Menu = ({ Icon, label, linkTo = "/" }) => {
   return (
     <li>
       <NavLink
-        to="#"
+        to={linkTo}
         className="flex items-center p-2 py-2 text-lg font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
       >
         <Icon className="text-xl" />
@@ -24,8 +24,8 @@ const LeftSidebar = () => {
     <aside className="w-full relative " aria-label="Sidebar">
       <div className="overflow-y-auto w-52 absolute top-3 right-3 py-4 px-3 bg-white rounded dark:bg-gray-800">
         <ul className="space-y-1">
-          <Menu Icon={BsNewspaper} label="My Feed" />
-          <Menu Icon={BsNewspaper} label="My Feed" />
+          <Menu Icon={BsNewspaper} label="My Feed" linkTo="/" />
+          <Menu Icon={BsNewspaper} label="Create Post" linkTo="/create" />
           <Menu Icon={BsNewspaper} label="My Feed" />
           <Menu Icon={BsNewspaper} label="My Feed" />
         </ul>

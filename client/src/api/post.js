@@ -6,7 +6,7 @@ const getPosts = async () => {
 };
 
 const getPost = async (post_id) => {
-  return await httpClientWithOutToken(`${API_URL}/${post_id}`, "GET");
+  return await httpClientWithOutToken(`${API_URL}/blog/${post_id}`, "GET");
 };
 
 const createPost = async (post) => {

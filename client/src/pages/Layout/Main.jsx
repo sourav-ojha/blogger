@@ -20,6 +20,7 @@ const BlogPostCard = ({ post }) => {
     username,
     full_name,
     category,
+    like_count,
     time_to_read,
     published_date,
   } = post;
@@ -29,38 +30,40 @@ const BlogPostCard = ({ post }) => {
     likePost(post_id);
   };
   return (
-    <Link
-      to={`/${url}`}
-      className="w-10/12 h-full p-4 flex flex-col  rounded-md shadow-sm justify-between hover:shadow-lg transition-all duration-300 cursor-pointer  "
+    <div
+      // to={`/${url}`}
+      className="w-10/12 h-full p-4 flex flex-col  rounded-md shadow-sm justify-between hover:shadow-lg transition-all duration-300   "
     >
-      {/* cover image  */}
-      <div className="w-full h-64 bg-gray-200 rounded-md">
-        <img
-          src="/profile.jpg"
-          alt="title"
-          className="w-full h-full object-cover rounded-md"
-        />
-      </div>
-      {/* title  */}
       <div className="w-full flex-1 flex flex-col justify-between">
-        <h3 className="text-3xl pt-5 font-medium">{title}</h3>
-        <p className="flex gap-2 items-center text-sm pt-2 pb-5 text-gray-500">
-          <BsBook className="text-lg" /> {time_to_read} min Read
-        </p>
-        <p className="text-sm text-gray-500">{content}</p>
-        <div className="flex gap-3 pt-4 items-center">
-          {/* small rounded image */}
-          <Avatar
-            alt="User settings"
-            img="/profile.jpg"
-            size="md"
-            rounded={true}
-          />
-          <div className="flex flex-col  ">
-            <p className="text-sm text-gray-500">{full_name}</p>
-            <p className="text-sm text-gray-500">{published_time_ago}</p>
+        <Link to={`/${url}`}>
+          {/* cover image  */}
+          <div className="w-full h-64 bg-gray-200 rounded-md">
+            <img
+              src="/profile.jpg"
+              alt="title"
+              className="w-full h-full object-cover rounded-md"
+            />
           </div>
-        </div>
+          {/* title  */}
+          <h3 className="text-3xl pt-5 font-medium">{title}</h3>
+          <p className="flex gap-2 items-center text-sm pt-2 pb-5 text-gray-500">
+            <BsBook className="text-lg" /> {time_to_read} min Read
+          </p>
+          <p className="text-sm text-gray-500">{content}</p>
+          <div className="flex gap-3 pt-4 items-center">
+            {/* small rounded image */}
+            <Avatar
+              alt="User settings"
+              img="/profile.jpg"
+              size="md"
+              rounded={true}
+            />
+            <div className="flex flex-col  ">
+              <p className="text-sm text-gray-500">{full_name}</p>
+              <p className="text-sm text-gray-500">{published_time_ago}</p>
+            </div>
+          </div>
+        </Link>
         {/* keywords */}
         <div className="flex gap-2 pt-4 items-center">
           {keywords &&
@@ -80,15 +83,18 @@ const BlogPostCard = ({ post }) => {
             Continue Reading
           </button>
           {/* like */}
-          <div className="flex items-center gap-1 text-gray-500 ">
-            <AiOutlineLike className="text-xl" onClick={handleLike} />
-            <p>10</p>
+          <div
+            className="flex items-center gap-1 text-gray-500 hover:text-blue-500 cursor-pointer  "
+            onClick={handleLike}
+          >
+            <AiOutlineLike className="text-xl" />
+            <p>{like_count}</p>
           </div>
         </div>
         {/* empty for gap  */}
         <div className="h-10"></div>
       </div>
-    </Link>
+    </div>
   );
 };
 

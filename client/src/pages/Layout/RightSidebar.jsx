@@ -28,7 +28,7 @@ const BlogPostCard = ({ post }) => {
           <div className="text-sm text-gray-500">{published_time_ago}</div>
           <div className="flex gap-1  text-md text-gray-500">
             <AiOutlineLike className="text-2xl" />
-            <p> 14</p>
+            <p> {post.like_count}</p>
           </div>
         </div>
       </div>
@@ -37,7 +37,7 @@ const BlogPostCard = ({ post }) => {
 };
 
 const RightSidebar = () => {
-  const { posts } = usePost();
+  const { trendingPosts } = usePost();
   return (
     <aside className="w-full relative " aria-label="Sidebar">
       <div className="overflow-y-auto w-96 h-[89vh] absolute top-3 left-3 py-4 px-3 bg-white rounded-md dark:bg-gray-800">
@@ -46,7 +46,7 @@ const RightSidebar = () => {
           <div className="p-2 px-4 rounded-2xl border">See All</div>
         </div>
         <ul className="space-y-1">
-          {posts.map((post) => (
+          {trendingPosts.map((post) => (
             <BlogPostCard post={post} key={post.post_id} />
           ))}
         </ul>

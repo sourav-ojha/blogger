@@ -1,6 +1,5 @@
 import React, { createContext, useReducer } from "react";
 import postApi from "../api/post";
-import sanitize from "sanitize";
 // make a usePost hook
 const PostContext = createContext();
 const usePost = () => React.useContext(PostContext);
@@ -9,6 +8,7 @@ const usePost = () => React.useContext(PostContext);
 const initialState = {
   q: "",
   posts: [],
+  trendingPosts: [],
   isFetching: false,
   isError: false,
   errorMessage: "",
@@ -21,8 +21,34 @@ const reducer = (state, action) => {
     case "GET_POSTS":
       return {
         ...state,
-        posts: action.payload,
+        posts: action.payload.sort(
+          (a, b) => new Date(b.published_date) - new Date(a.published_date)
+        ),
       };
+    case "SET_TRENDING_POSTS":
+      return {
+        ...state,
+        trendingPosts: action.payload.sort(
+          (a, b) => b.like_count - a.like_count
+        ),
+      };
+    case "UPDATE_POST_DETAIL":
+      return {
+        ...state,
+        posts: state.posts.map((post) => {
+          if (post.post_id === action.payload.post_id) {
+            return action.payload;
+          }
+          return post;
+        }),
+        trendingPosts: state.trendingPosts.map((post) => {
+          if (post.post_id === action.payload.post_id) {
+            return action.payload;
+          }
+          return post;
+        }),
+      };
+
     case "SUCCESS_MESSAGE":
       return {
         ...state,
@@ -59,8 +85,26 @@ const PostProvider = ({ children }) => {
     try {
       const res = await postApi.getPosts();
       dispatch({ type: "GET_POSTS", payload: res.data });
+      dispatch({ type: "SET_TRENDING_POSTS", payload: res.data });
     } catch (err) {
-      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.message });
+      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
+    }
+    clearMessage();
+  };
+  const getUpdatedPost = async (id) => {
+    try {
+      const res = await postApi.getPost(id);
+      dispatch({ type: "UPDATE_POST_DETAIL", payload: res.data });
+    } catch (err) {
+      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
+    }
+  };
+  const createPost = async (data) => {
+    try {
+      const res = await postApi.createPost(data);
+      dispatch({ type: "SUCCESS_MESSAGE", payload: res.data.msg });
+    } catch (err) {
+      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
     }
     clearMessage();
   };
@@ -68,6 +112,7 @@ const PostProvider = ({ children }) => {
   const likePost = async (post_id) => {
     try {
       const res = await postApi.likePost(post_id);
+      await getUpdatedPost(post_id);
       console.log(res);
       dispatch({ type: "SUCCESS_MESSAGE", payload: res.data.msg });
     } catch (err) {
@@ -92,6 +137,7 @@ const PostProvider = ({ children }) => {
         ...state,
         getPosts,
         likePost,
+        createPost,
       }}
     >
       {children}
