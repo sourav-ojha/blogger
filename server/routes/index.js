@@ -22,6 +22,16 @@ function decodeJWT(token) {
     return decoded_token.username;
 }
 
+router.get("/user_details", auth, async (req, res) => {
+    try {
+        const username = decodeJWT(req.header("Authorization").split(" ")[1]);
+        const user = await User.findOne({ username: username }).select({ password: 0, __v: 0, _id: 0 });
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json({ msg: "Something went wrong!" });
+    }
+});
+
 //Get all posts
 
 //No authentication required to view public posts
@@ -37,8 +47,12 @@ router.get("/blog", async (req, res) => {
     }
 });
 
-//Get a specific post
-//No authentication required to view public posts
+//----------------------- Logic to specific post content -----------------------------
+// Get a specific post
+// Send unique post id
+// Look for the post in the database for same post id
+// No authentication required to view public posts
+
 router.get("/blog/:post_id/", async (req, res) => {
     let post_id = sanitize(req.params.post_id);
 
@@ -127,8 +141,10 @@ router.delete("/blog/:post_id", auth, async (req, res) => {
     }
 });
 
+// ------------------ Logic to Search the posts ------------------
+
 // Search post as per keywords in the post title and keywords
-// Display in descending order of likes
+// Display the result in descending order of number of likes
 // No authentication required to search in public posts
 
 router.get("/search", async (req, res) => {
@@ -150,7 +166,10 @@ router.get("/search", async (req, res) => {
     }
 });
 
+//--------------------- Logic to Like Post ---------------------
 // Like posts
+// - Check if same user liked the same post earlier or not
+// - If liked earlier then dislike the post else like the post
 
 router.post("/blog/:post_id/like", auth, async (req, res) => {
     let post_id = sanitize(req.params.post_id); // Sanitize the data to prevent injection attacks
