@@ -41,8 +41,10 @@ router.get("/blog", async (req, res) => {
 
     try {
         const posts = await Post.find({ is_published: true }).select({ _id: 0, __v: 0 });
+
         res.status(200).send(posts);
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ msg: "Something went wrong!" });
     }
 });
@@ -170,6 +172,7 @@ router.get("/search", async (req, res) => {
 // Like posts
 // - Check if same user liked the same post earlier or not
 // - If liked earlier then dislike the post else like the post
+// - Update the number of likes in the post collection
 
 router.post("/blog/:post_id/like", auth, async (req, res) => {
     let post_id = sanitize(req.params.post_id); // Sanitize the data to prevent injection attacks
@@ -182,6 +185,22 @@ router.post("/blog/:post_id/like", auth, async (req, res) => {
                 //If post is already liked by the user, unlike the post
 
                 await Likes.findOneAndDelete({ post_id: post_id, username: decodeJWT(req.header("Authorization").split(" ")[1]) });
+
+                //Count number of likes for each post
+
+                var aggregate_likes_count = await Likes.aggregate([
+                    {
+                        $group: { _id: "$post_id", like_count: { $sum: 1 } },
+                    },
+                ]);
+                var like_count;
+                aggregate_likes_count.forEach((i) => {
+                    if (i._id === post_id) {
+                        like_count = i.like_count;
+                    }
+                });
+
+                await Post.findOneAndUpdate({ post_id: post_id }, { like_count: like_count });
                 return res.status(200).json({ msg: "Post has beed disliked!" });
             } else {
                 //Update likes in like collection
@@ -189,9 +208,26 @@ router.post("/blog/:post_id/like", auth, async (req, res) => {
                     post_id: post_id,
                     username: decodeJWT(req.header("Authorization").split(" ")[1]),
                 });
+
+                //Count number of likes for each post
+
+                var aggregate_likes_count = await Likes.aggregate([
+                    {
+                        $group: { _id: "$post_id", like_count: { $sum: 1 } },
+                    },
+                ]);
+                var like_count;
+                aggregate_likes_count.forEach((i) => {
+                    if (i._id === post_id) {
+                        like_count = i.like_count;
+                    }
+                });
+
+                await Post.findOneAndUpdate({ post_id: post_id }, { like_count: like_count });
                 return res.status(200).json({ msg: "Post liked successfully!" });
             }
         } catch (err) {
+            console.log(err);
             return res.status(400).json({ msg: "Something went wrong!" });
         }
     } else {
