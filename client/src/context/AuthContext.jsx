@@ -1,4 +1,5 @@
 // context for auth state
+import { API_URL } from "../constants";
 import React, { createContext, useReducer } from "react";
 import { httpClientWithOutToken } from "../utils/httpClient";
 
@@ -14,36 +15,38 @@ const reducer = (state, action) => {
       localStorage.setItem("token", action.payload.token);
       return {
         ...state,
-        user: action.payload.user,
         token: action.payload.token,
       };
     case "LOGOUT":
       localStorage.removeItem("token");
-      return { user: null, token: null };
+      return { ...state, token: null };
     default:
       return state;
   }
 };
 
+function getTokenFromStorage() {
+  return localStorage.getItem("token") ? localStorage.getItem("token") : null;
+}
+
 // make a provider
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, {
-    user: null,
-    token: null,
+    token: getTokenFromStorage(),
   });
 
   const login = (body) => {
-    return httpClientWithOutToken("", "POST", body)
+    return httpClientWithOutToken(`${API_URL}/signin`, "POST", body)
       .then((res) => {
         dispatch({
           type: "LOGIN",
-          payload: { user: res.data?.user, token: res.data?.token },
+          payload: { token: res.data.token },
         });
         return { status: true };
       })
       .catch((err) => {
         console.log(err);
-        return { status: false };
+        return { status: false, message: err.response.data.msg };
       });
   };
 
@@ -52,14 +55,15 @@ const AuthProvider = ({ children }) => {
   };
 
   const register = (body) =>
-    httpClientWithOutToken("", "POST", body)
+    httpClientWithOutToken(`${API_URL}/signup`, "POST", body)
       .then((res) => {
+        console.log(res);
         dispatch({ type: "REGISTER", payload: { token: res.data.token } });
         return { status: true };
       })
       .catch((err) => {
         console.log(err);
-        return { status: false, message: err.response.data.message };
+        return { status: false, message: err.response.data.msg };
       });
 
   const value = { ...state, login, logout, register };

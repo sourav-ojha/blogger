@@ -1,3 +1,4 @@
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Auth from "./pages/Auth";
@@ -12,8 +13,8 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Auth />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/signin" element={<Login />} />
+          <Route path="/signup" element={<Register />} />
         </Route>
 
         <Route path="/" element={<Layout />}>

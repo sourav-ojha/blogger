@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputField = ({ label, Icon, name, ...rest }) => {
+const InputField = ({ label, Icon, name, EndIcon, clickEndIcon, ...rest }) => {
   return (
     <div className="flex flex-col mb-5">
       <label
@@ -43,6 +43,24 @@ const InputField = ({ label, Icon, name, ...rest }) => {
       "
           {...rest}
         />
+        {!!EndIcon && (
+          <div
+            className="
+        inline-flex
+        items-center
+        justify-center
+        absolute
+        right-0
+        top-0
+        h-full
+        w-10
+        text-gray-400
+      "
+            onClick={clickEndIcon}
+          >
+            <EndIcon className="fas fa-at text-blue-500" />
+          </div>
+        )}
       </div>
     </div>
   );

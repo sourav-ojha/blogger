@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaAt, FaLock } from "react-icons/fa";
 import InputField from "./InputField";
+import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+
 import { useNavigate, Link } from "react-router-dom";
 import { Toast } from "../../components/Toast";
 import CircularLoading from "../../components/Loading/CircularLoading";
@@ -8,11 +10,18 @@ import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
   const [formData, setFormData] = React.useState({
     username: "",
     password: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -26,21 +35,25 @@ const Login = () => {
   }, [token, navigate]);
 
   useEffect(() => {
-    if (isError) {
+    if (error) {
       Toast.fire({
         icon: "error",
-        title: "Invalid Credential.",
+        title: error,
       });
       setIsLoading(false);
     }
-  }, [isError, isLoading, navigate]);
+  }, [error, isLoading, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    let { status } = await login(formData);
+    let { status, message } = await login(formData);
     if (!status) {
-      setIsError(true);
+      console.log(message);
+      setError(message);
+    } else {
+      setIsLoading(false);
+      setError(false);
     }
   };
   return (
@@ -80,10 +93,12 @@ const Login = () => {
             <InputField
               label="Password:"
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
               Icon={FaLock}
+              EndIcon={showPassword ? MdVisibility : MdVisibilityOff}
+              clickEndIcon={toggleShowPassword}
               placeholder="Enter Your Password"
               required
             />
@@ -138,7 +153,7 @@ const Login = () => {
       </div>
       <div className="flex justify-center items-center mt-6">
         <Link
-          to="/register"
+          to="/signup"
           className="
               inline-flex
               items-center
@@ -150,7 +165,7 @@ const Login = () => {
           <span className="ml-2">
             You don't have an account?
             <span className="text-xs ml-2 text-blue-500 font-semibold">
-              Register now
+              sign up
             </span>
           </span>
         </Link>

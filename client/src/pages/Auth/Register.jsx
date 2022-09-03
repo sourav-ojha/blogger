@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaAt, FaLock } from "react-icons/fa";
+import { MdMail, MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { BiUserCircle } from "react-icons/bi";
 import InputField from "./InputField";
 import { useNavigate, Link } from "react-router-dom";
 import { Toast } from "../../components/Toast";
@@ -8,11 +10,17 @@ import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState(false);
   const [formData, setFormData] = React.useState({
     username: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -26,48 +34,58 @@ const Register = () => {
   }, [token, navigate]);
 
   useEffect(() => {
-    if (isError) {
+    if (error) {
       Toast.fire({
         icon: "error",
-        title: "Invalid Credential.",
+        title: error,
       });
       setIsLoading(false);
     }
-  }, [isError, isLoading, navigate]);
+  }, [error, isLoading, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    let { status } = await register(formData);
+    let { status, message } = await register(formData);
     if (!status) {
-      setIsError(true);
+      setError(message);
+    } else {
+      navigate("/signin");
     }
   };
   return (
     <>
-      <div
-        className="
-    flex flex-col
-    bg-white
-    shadow-md
-    px-4
-    sm:px-6
-    md:px-8
-    lg:px-10
-    py-8
-    rounded-3xl
-    w-50
-    max-w-md
-  "
-      >
+      <div className=" flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-3xl w-full sm:w-3/6 lg:w-2/6">
+        {/* // max-w-lg */}
         <div className="font-medium self-center text-xl sm:text-3xl text-gray-800">
           Welcome
         </div>
-        <div className="mt-4 self-center text-xl sm:text-sm text-gray-800">
-          Create an account
+        <div className="mt-4 self-center sm:text-xl sm text-center  text-gray-800">
+          Create your account & Begin your journey
         </div>
-        <div className="mt-10">
+        <div className=" self-center text-xl sm:text-sm text-gray-800">
+          Blogger
+        </div>
+        <div className="mt-5">
           <form onSubmit={handleSubmit}>
+            <InputField
+              label="Full name:"
+              name="full_name"
+              value={formData.full_name}
+              onChange={handleChange}
+              Icon={BiUserCircle}
+              placeholder="Enter Your full name"
+              required
+            />
+            <InputField
+              label="Email address:"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              Icon={MdMail}
+              placeholder="Enter Your email address"
+              required
+            />
             <InputField
               label="User name:"
               name="username"
@@ -80,10 +98,12 @@ const Register = () => {
             <InputField
               label="Password:"
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
               Icon={FaLock}
+              EndIcon={showPassword ? MdVisibility : MdVisibilityOff}
+              clickEndIcon={toggleShowPassword}
               placeholder="Enter Your Password"
               required
             />
@@ -111,7 +131,7 @@ const Register = () => {
               "
                 disabled={isLoading}
               >
-                <span className="mr-2 uppercase">Register</span>
+                <span className="mr-2 uppercase">Sign up</span>
                 {isLoading ? (
                   <span>
                     <CircularLoading />
@@ -138,7 +158,7 @@ const Register = () => {
       </div>
       <div className="flex justify-center items-center mt-6">
         <Link
-          to="/login"
+          to="/signin"
           className="
           inline-flex
           items-center
@@ -150,7 +170,7 @@ const Register = () => {
           <span className="ml-2">
             Already have an account?
             <span className="text-xs ml-2 text-blue-500 font-semibold">
-              Login now
+              signin now
             </span>
           </span>
         </Link>
