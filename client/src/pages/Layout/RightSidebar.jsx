@@ -10,7 +10,7 @@ const BlogPostCard = ({ post }) => {
 
   return (
     <Link
-      to={`/${post.url}`}
+      to={`${post.url}`}
       className="w-10/12 p-4 flex  gap-3 rounded-md  border-b justify-between hover:shadow-lg transition-all duration-300 cursor-pointer "
     >
       <div className="w-12 h-12  bg-gray-200 rounded-md">

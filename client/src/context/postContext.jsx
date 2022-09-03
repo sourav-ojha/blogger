@@ -6,8 +6,8 @@ const usePost = () => React.useContext(PostContext);
 
 // make initial state
 const initialState = {
-  q: "",
   posts: [],
+  post: null,
   trendingPosts: [],
   isFetching: false,
   isError: false,
@@ -18,6 +18,12 @@ const initialState = {
 // make a reducer
 const reducer = (state, action) => {
   switch (action.type) {
+    case "GET_POST":
+      return {
+        ...state,
+        post: action.payload,
+        isFetching: false,
+      };
     case "GET_POSTS":
       return {
         ...state,
@@ -110,6 +116,17 @@ const PostProvider = ({ children }) => {
       dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
     }
   };
+
+  const getPost = async (id) => {
+    try {
+      const res = await postApi.getPost(id);
+      dispatch({ type: "GET_POST", payload: res.data });
+    } catch (err) {
+      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
+    }
+    clearMessage();
+  };
+
   const createPost = async (data) => {
     try {
       const res = await postApi.createPost(data);
@@ -149,6 +166,7 @@ const PostProvider = ({ children }) => {
         getPosts,
         likePost,
         createPost,
+        getPost,
         searchPosts,
       }}
     >
