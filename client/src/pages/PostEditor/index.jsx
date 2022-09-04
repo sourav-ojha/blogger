@@ -202,7 +202,7 @@ const PostEditor = () => {
             client.picker(options).open();
           }}
         >
-          Upload Cover Image
+          Upload Cover Image <span className="text-red-500">(Required)</span>
         </button>
         {/* preview image */}
         {!!state.coverImage && (

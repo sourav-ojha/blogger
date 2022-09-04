@@ -4,7 +4,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { MdOutlineSearch } from "react-icons/md";
-import { BiSave } from "react-icons/bi";
 import { usePost } from "../../context/postContext";
 
 const Appbar = () => {
@@ -24,7 +23,7 @@ const Appbar = () => {
     };
   }
   const handleSearch = (e) => {
-    searchPosts(e.target.value);
+    if (e.target.value > 1) searchPosts(e.target.value);
   };
 
   return (
@@ -56,53 +55,71 @@ const Appbar = () => {
         </div>
 
         <div className="flex md:order-2">
-          <Dropdown
-            arrowIcon={false}
-            inline={true}
-            label={
-              <Avatar alt="User settings" img="/profile.jpg" rounded={true} />
-            }
-          >
-            <Dropdown.Header>
-              {user ? (
-                <>
-                  <span className="block text-md">{user.full_name}</span>
-                  <span className="block text-sm">( {user.username} )</span>
-                  <span className="block truncate text-sm font-medium">
-                    {user.email}
-                  </span>
-                </>
-              ) : (
-                <>
-                  {/* please login  */}
-                  <span className="block text-sm">Please Login</span>
-                  <span className="block truncate text-sm font-medium">
-                    to access your profile
-                  </span>
-                  {/* divider */}
-                  <div className="my-2 border-t border-gray-200"></div>
-                  <div className="flex gap-2 justify-center">
-                    <Link to="/signin" className="mt-2 ">
-                      <button className="border p-2 px-4 bg-blue-500 text-white ">
-                        signin
-                      </button>
-                    </Link>
-                    <Link to="/signup" className="mt-2 ">
-                      <button className="border p-2 px-4 bg-white text-blue-500 ">
-                        signup
-                      </button>
-                    </Link>
-                  </div>
-                </>
+          {!user ? (
+            <div className="flex gap-2 justify-center">
+              <Link to="/signin" className="mt-2 ">
+                <button className="border p-2 px-4 bg-blue-500 text-white ">
+                  signin
+                </button>
+              </Link>
+              <Link to="/signup" className="mt-2 ">
+                <button className="border p-2 px-4 bg-white text-blue-500 ">
+                  signup
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <Dropdown
+              arrowIcon={false}
+              inline={true}
+              label={
+                <Avatar alt="User settings" img="/profile.jpg" rounded={true} />
+              }
+            >
+              <Dropdown.Header>
+                {
+                  user && (
+                    <>
+                      <span className="block text-md">{user.full_name}</span>
+                      <span className="block text-sm">( {user.username} )</span>
+                      <span className="block truncate text-sm font-medium">
+                        {user.email}
+                      </span>
+                    </>
+                  )
+                  // : (
+                  //   <>
+                  //     {/* please login  */}
+                  //     <span className="block text-sm">Please Login</span>
+                  //     <span className="block truncate text-sm font-medium">
+                  //       to access your profile
+                  //     </span>
+                  //     {/* divider */}
+                  //     <div className="my-2 border-t border-gray-200"></div>
+                  //     <div className="flex gap-2 justify-center">
+                  //       <Link to="/signin" className="mt-2 ">
+                  //         <button className="border p-2 px-4 bg-blue-500 text-white ">
+                  //           signin
+                  //         </button>
+                  //       </Link>
+                  //       <Link to="/signup" className="mt-2 ">
+                  //         <button className="border p-2 px-4 bg-white text-blue-500 ">
+                  //           signup
+                  //         </button>
+                  //       </Link>
+                  //     </div>
+                  //   </>
+                  // )
+                }
+              </Dropdown.Header>
+              {/* <Dropdown.Item>Dashboard</Dropdown.Item> */}
+              {/* <Dropdown.Item>Settings</Dropdown.Item> */}
+              {/* <Dropdown.Item>Earnings</Dropdown.Item> */}
+              {token && (
+                <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
               )}
-            </Dropdown.Header>
-            {/* <Dropdown.Item>Dashboard</Dropdown.Item> */}
-            {/* <Dropdown.Item>Settings</Dropdown.Item> */}
-            {/* <Dropdown.Item>Earnings</Dropdown.Item> */}
-            {token && (
-              <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
-            )}
-          </Dropdown>
+            </Dropdown>
+          )}
           {/* <Navbar.Toggle /> */}
         </div>
       </div>

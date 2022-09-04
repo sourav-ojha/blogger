@@ -1,3 +1,4 @@
+import { Avatar } from "flowbite-react";
 import moment from "moment";
 import React from "react";
 import { AiOutlineLike } from "react-icons/ai";
@@ -13,12 +14,8 @@ const BlogPostCard = ({ post }) => {
       to={`${post.url}`}
       className="w-10/12 p-4 flex  gap-3 rounded-md  border-b justify-between hover:shadow-lg transition-all duration-300 cursor-pointer "
     >
-      <div className="w-12 h-12  bg-gray-200 rounded-md">
-        <img
-          src="/profile.jpg"
-          alt="title"
-          className="w-full h-full object-cover rounded-md"
-        />
+      <div className="w-12 h-12">
+        <Avatar alt="User settings" size="md" rounded={true} />
       </div>
       <div className="w-full flex-1 flex flex-col justify-between">
         <h3 className="text-xl  font-medium">{post.title}</h3>

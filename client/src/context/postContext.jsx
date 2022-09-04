@@ -65,6 +65,9 @@ const reducer = (state, action) => {
       return {
         ...state,
         posts: state.posts.filter((post) => post.post_id !== action.payload),
+        myPosts: state.myPosts.filter(
+          (post) => post.post_id !== action.payload
+        ),
         trendingPosts: state.trendingPosts.filter(
           (post) => post.post_id !== action.payload
         ),

@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import { BsBook } from "react-icons/bs";
 import { marked } from "marked";
 import { Avatar } from "flowbite-react";
-import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineLike } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
-import { MdDelete } from "react-icons/md";
+import Swal from "sweetalert2";
 
 export const BlogPostCard = ({ post }) => {
   const { likePost, deletePost } = usePost();
@@ -57,17 +57,19 @@ export const BlogPostCard = ({ post }) => {
             alt="title"
             className="w-full h-full object-cover rounded-md"
           />
-          <Link
-            to={`/blog/${post_id}/edit`}
-            className="absolute top-0 right-0 p-2 bg-gray-900 bg-opacity-50 rounded-md cursor-pointer "
-          >
-            <BiEdit className="text-4xl bg-orange-500" />
-          </Link>
-          <div
-            className="absolute top-0 right-0 p-2 bg-gray-900 bg-opacity-50 rounded-md cursor-pointer "
-            onClick={handleDelete}
-          >
-            <MdDelete className="text-4xl bg-red-500" />
+          <div className="absolute top-1 right-1 flex gap-2 ">
+            <Link
+              to={`/blog/${post_id}/edit`}
+              className="p-1 text-white bg-orange-500 rounded-md cursor-pointer  "
+            >
+              <BiEdit className="text-4xl " />
+            </Link>
+            <div
+              className=" p-1 text-white bg-red-500 rounded-md cursor-pointer  "
+              onClick={handleDelete}
+            >
+              <AiOutlineDelete className="text-4xl " />
+            </div>
           </div>
         </div>
         <Link to={`${url}`}>
@@ -141,14 +143,14 @@ const MyPosts = () => {
     getMyPosts();
   }, []);
 
-  return (
-    myPosts && (
-      <ul className="space-y-4  flex flex-col items-center ">
-        {myPosts.map((post) => (
-          <BlogPostCard key={post.post_id} post={post} />
-        ))}
-      </ul>
-    )
+  return myPosts && myPosts.length > 0 ? (
+    <ul className="space-y-4  flex flex-col items-center ">
+      {myPosts.map((post) => (
+        <BlogPostCard key={post.post_id} post={post} />
+      ))}
+    </ul>
+  ) : (
+    <p className="text-2xl text-gray-500">No posts found</p>
   );
 };
 

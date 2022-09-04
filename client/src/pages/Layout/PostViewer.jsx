@@ -27,7 +27,7 @@ const PostViewer = () => {
           {/* cover image  */}
           <div className="w-full h-64 bg-gray-200 rounded-md">
             <img
-              src="/profile.jpg"
+              src={post.cover_img}
               alt="title"
               className="w-full h-full object-cover rounded-md"
             />
@@ -57,12 +57,7 @@ const PostViewer = () => {
           <div className="flex justify-between ">
             <div className="flex gap-3 pt-4 items-center">
               {/* small rounded image */}
-              <Avatar
-                alt="User settings"
-                img="/profile.jpg"
-                size="md"
-                rounded={true}
-              />
+              <Avatar alt="User settings" size="md" rounded={true} />
               <div className="flex flex-col  ">
                 <p className="text-sm text-gray-500">{post.full_name}</p>
                 <p className="text-sm text-gray-500">
