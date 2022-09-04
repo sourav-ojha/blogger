@@ -7,6 +7,7 @@ const usePost = () => React.useContext(PostContext);
 // make initial state
 const initialState = {
   posts: [],
+  myPosts: [],
   post: null,
   trendingPosts: [],
   isFetching: false,
@@ -31,6 +32,12 @@ const reducer = (state, action) => {
           (a, b) => new Date(b.published_date) - new Date(a.published_date)
         ),
       };
+    case "GET_MY_POSTS":
+      return {
+        ...state,
+        myPosts: action.payload,
+      };
+
     case "SET_TRENDING_POSTS":
       return {
         ...state,
@@ -127,6 +134,16 @@ const PostProvider = ({ children }) => {
     clearMessage();
   };
 
+  const getMyPosts = async () => {
+    try {
+      const res = await postApi.getMyPosts();
+      dispatch({ type: "GET_MY_POSTS", payload: res.data });
+    } catch (err) {
+      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
+    }
+    clearMessage();
+  };
+
   const createPost = async (data) => {
     try {
       const res = await postApi.createPost(data);
@@ -168,6 +185,7 @@ const PostProvider = ({ children }) => {
         createPost,
         getPost,
         searchPosts,
+        getMyPosts,
       }}
     >
       {children}

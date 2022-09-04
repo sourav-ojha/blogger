@@ -10,6 +10,7 @@ import { PostProvider } from "./context/postContext";
 import PostEditor from "./pages/PostEditor";
 import Home from "./pages/Layout/Home";
 import PostViewer from "./pages/Layout/PostViewer";
+import MyPosts from "./pages/Layout/MyPosts";
 
 function App() {
   return (
@@ -21,10 +22,12 @@ function App() {
             <Route path="/signup" element={<Register />} />
           </Route>
 
-          <Route path="/create" element={<PostEditor />} />
+          <Route path="/blog/create" element={<PostEditor />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
+            <Route path="/myposts" element={<MyPosts />} />
             <Route path="blog/:id/:name" element={<PostViewer />} />
+            {/* <Route path="blog/:id/edit" element={<PostViewer />} /> */}
           </Route>
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>

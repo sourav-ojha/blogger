@@ -23,8 +23,8 @@
 }
 
 /* default */
-/* 
-h1 {
+
+.ds h1 {
   display: block;
   font-size: 2em;
   margin-top: 0.67em;
@@ -33,7 +33,7 @@ h1 {
   margin-right: 0;
   font-weight: bold;
 }
-h2 {
+.ds h2 {
   display: block;
   font-size: 1.5em;
   margin-top: 0.83em;
@@ -42,7 +42,7 @@ h2 {
   margin-right: 0;
   font-weight: bold;
 }
-h3 {
+.ds h3 {
   display: block;
   font-size: 1.17em;
   margin-top: 1em;
@@ -51,7 +51,7 @@ h3 {
   margin-right: 0;
   font-weight: bold;
 }
-h4 {
+.ds h4 {
   display: block;
   margin-top: 1.33em;
   margin-bottom: 1.33em;
@@ -59,7 +59,7 @@ h4 {
   margin-right: 0;
   font-weight: bold;
 }
-h5 {
+.ds h5 {
   display: block;
   font-size: 0.83em;
   margin-top: 1.67em;
@@ -68,7 +68,7 @@ h5 {
   margin-right: 0;
   font-weight: bold;
 }
-h6 {
+.ds h6 {
   display: block;
   font-size: 0.67em;
   margin-top: 2.33em;
@@ -77,13 +77,13 @@ h6 {
   margin-right: 0;
   font-weight: bold;
 }
-head {
+.ds head {
   display: none;
 }
-header {
+.ds header {
   display: block;
 }
-hr {
+.ds hr {
   display: block;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
@@ -93,70 +93,70 @@ hr {
   border-width: 1px;
 }
 
-p {
+.ds p {
   display: block;
   margin-top: 1em;
   margin-bottom: 1em;
   margin-left: 0;
   margin-right: 0;
 }
-strike {
+.ds strike {
   text-decoration: line-through;
 }
-strong {
+.ds strong {
   font-weight: bold;
 }
-sub {
+.ds sub {
   vertical-align: sub;
   font-size: smaller;
 }
-sup {
+.ds sup {
   vertical-align: super;
   font-size: smaller;
 }
-table {
+.ds table {
   display: table;
   border-collapse: separate;
   border-spacing: 2px;
   border-color: gray;
 }
-tbody {
+.ds tbody {
   display: table-row-group;
   vertical-align: middle;
   border-color: inherit;
 }
-td {
+.ds td {
   display: table-cell;
   vertical-align: inherit;
 }
-tfoot {
+.ds tfoot {
   display: table-footer-group;
   vertical-align: middle;
   border-color: inherit;
 }
-th {
+.ds th {
   display: table-cell;
   vertical-align: inherit;
   font-weight: bold;
   text-align: center;
 }
-thead {
+.ds thead {
   display: table-header-group;
   vertical-align: middle;
   border-color: inherit;
 }
-title {
+.ds title {
   display: none;
 }
-tr {
+.ds tr {
   display: table-row;
   vertical-align: inherit;
   border-color: inherit;
 }
-u {
+.ds u {
   text-decoration: underline;
 }
-ul {
+.ds ul {
   display: block;
   list-style-type: disc;
   margin-top: 1em;
@@ -164,4 +164,4 @@ ul {
   margin-left: 0;
   margin-right: 0;
   padding-left: 40px;
-} */
+}

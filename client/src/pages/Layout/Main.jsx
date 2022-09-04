@@ -33,7 +33,7 @@ const Main = () => {
 
   return (
     <div className="flex-1 flex  bg-gray-100">
-      <div className="w-1/5 bg-gray-100 ">
+      <div className=" hidden md:block w-1/5 bg-gray-100 ">
         <LeftSidebar />
       </div>
       <div className="flex-1">
@@ -43,7 +43,7 @@ const Main = () => {
           </div>
         </div>
       </div>
-      <div className="w-2/6 bg-gray-100 ">
+      <div className=" hidden md:block w-2/6 bg-gray-100 ">
         <RightSidebar />
       </div>
     </div>

@@ -28,6 +28,10 @@ const searchPosts = async (search) => {
   );
 };
 
+const getMyPosts = async () => {
+  return await httpClient(`${API_URL}/blog/my_posts`, "GET");
+};
+
 let postApi = {
   getPosts,
   getPost,
@@ -35,5 +39,6 @@ let postApi = {
   deletePost,
   likePost,
   searchPosts,
+  getMyPosts,
 };
 export default postApi;

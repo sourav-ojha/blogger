@@ -46,7 +46,7 @@ const PostViewer = () => {
               ))}
           </div>
           <div
-            className=""
+            className="default_style ds"
             dangerouslySetInnerHTML={{ __html: marked.parse(post.content) }}
           />
           <div className="flex gap-3 pt-4 items-center">

@@ -42,8 +42,10 @@ const RightSidebar = () => {
     <aside className="w-full relative " aria-label="Sidebar">
       <div className="overflow-y-auto w-96 h-[89vh] absolute top-3 left-3 py-4 px-3 bg-white rounded-md dark:bg-gray-800">
         <div className="w-full  p-1 flex justify-between items-center ">
-          <h3 className="text-xl font-semibold">Trending</h3>
-          <div className="p-2 px-4 rounded-2xl border">See All</div>
+          <h3 className="text-3xl font-semibold right_sidebar_heading ">
+            Trending
+          </h3>
+          <div className="p-2 px-4 rounded-4xl border">See All</div>
         </div>
         <ul className="space-y-1">
           {trendingPosts.map((post) => (

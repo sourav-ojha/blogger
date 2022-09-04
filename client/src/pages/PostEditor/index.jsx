@@ -71,7 +71,7 @@ const PostEditor = () => {
       content: state.content,
       keywords: state.keywords.split(","),
       category: state.category,
-      coverImage: state.coverImage,
+      img: state.coverImage,
     };
     createPost(payload);
   };

@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { usePost } from "../../context/postContext";
-import { AiOutlineLike } from "react-icons/ai";
-import { Avatar } from "flowbite-react";
 import moment from "moment";
-import { BsBook } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { BsBook } from "react-icons/bs";
 import { marked } from "marked";
- const BlogPostCard = ({ post }) => {
+import { Avatar } from "flowbite-react";
+import { AiOutlineLike } from "react-icons/ai";
+import { BiEdit } from "react-icons/bi";
+
+export const BlogPostCard = ({ post }) => {
   const { likePost } = usePost();
   const {
     title,
@@ -27,20 +29,20 @@ import { marked } from "marked";
     likePost(post_id);
   };
   return (
-    <div
-      // to={`/${url}`}
-      className="w-10/12 h-full p-4 flex flex-col  rounded-md shadow-sm justify-between hover:shadow-lg transition-all duration-300   "
-    >
+    <div className="w-10/12 h-full p-4 flex flex-col  rounded-md shadow-sm justify-between hover:shadow-lg transition-all duration-300   ">
       <div className="w-full flex-1 flex flex-col justify-between">
-        <Link to={`${url}`}>
-          {/* cover image  */}
-          <div className="w-full h-64 bg-gray-200 rounded-md">
-            <img
-              src="/profile.jpg"
-              alt="title"
-              className="w-full h-full object-cover rounded-md"
-            />
+        {/* cover image  */}
+        <div className="w-full h-64 relative bg-gray-200 rounded-md">
+          <img
+            src="/profile.jpg"
+            alt="title"
+            className="w-full h-full object-cover rounded-md"
+          />
+          <div className="absolute top-0 right-0 p-2 bg-gray-900 bg-opacity-50 rounded-md cursor-pointer ">
+            <BiEdit className="text-4xl bg-red-500" />
           </div>
+        </div>
+        <Link to={`${url}`}>
           {/* title  */}
           <h3 className="text-3xl pt-5 font-medium">{title}</h3>
           <p className="flex gap-2 items-center text-sm pt-2 pb-5 text-gray-500">
@@ -104,16 +106,22 @@ import { marked } from "marked";
   );
 };
 
-const Home = () => {
-  const { getPosts, posts, isError, errorMessage, successMessage } = usePost();
+const MyPosts = () => {
+  const { myPosts, getMyPosts } = usePost();
+
+  useEffect(() => {
+    getMyPosts();
+  }, []);
 
   return (
-    <ul className="space-y-4  flex flex-col items-center ">
-      {posts &&
-        posts.length > 0 &&
-        posts.map((post) => <BlogPostCard post={post} key={post.post_id} />)}
-    </ul>
+    myPosts && (
+      <div>
+        {myPosts.map((post) => (
+          <BlogPostCard key={post.post_id} post={post} />
+        ))}
+      </div>
+    )
   );
 };
 
-export default Home;
+export default MyPosts;
