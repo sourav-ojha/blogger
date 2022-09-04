@@ -34,6 +34,18 @@ const LeftSidebar = () => {
           <Menu Icon={BsNewspaper} label="My Posts" linkTo="/myposts" />
         </ul>
       </div>
+      <div
+        className="overflow-y-auto w-52 absolute top-3 right-3 py-4 px-3 bg-white rounded dark:bg-gray-800"
+        style={{
+          backgroundColor: "rgb(248, 249, 250)",
+        }}
+      >
+        <ul className="space-y-1">
+          <Menu Icon={BsNewspaper} label="Feed" linkTo="/" />
+          <Menu Icon={BsNewspaper} label="Create Post" linkTo="/blog/create" />
+          <Menu Icon={BsNewspaper} label="My Posts" linkTo="/myposts" />
+        </ul>
+      </div>
     </aside>
   );
 };

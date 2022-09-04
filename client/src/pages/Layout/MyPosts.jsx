@@ -12,8 +12,8 @@ import { useAuth } from "../../context/AuthContext";
 
 export const BlogPostCard = ({ post }) => {
   const { likePost, deletePost } = usePost();
-  const {user} = useAuth()
-  const navigate = useNavigate()
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const {
     title,
     url,
@@ -155,11 +155,15 @@ export const BlogPostCard = ({ post }) => {
 };
 
 const MyPosts = () => {
+  const navigate = useNavigate();
   const { myPosts, getMyPosts } = usePost();
-
+  const { token } = useAuth();
   useEffect(() => {
     getMyPosts();
   }, []);
+  useEffect(() => {
+    if (!token) navigate("/");
+  }, [token, navigate]);
 
   return myPosts && myPosts.length > 0 ? (
     <ul className="space-y-4  flex flex-col items-center ">
