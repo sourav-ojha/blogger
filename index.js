@@ -10,9 +10,11 @@ const app = express();
 
 db();
 
-//cors
+//cors to allow cross origin resource sharing multiple domains
 
-app.use(cors());
+app.use(cors({ origin: "https://blogger-sourav-ojha.vercel.app/" }));
+
+// app.use(cors());
 app.use(express.json());
 app.disable("x-powered-by"); // Hide the fact that we are using express for security reasons
 
