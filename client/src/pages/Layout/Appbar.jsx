@@ -8,7 +8,7 @@ import { usePost } from "../../context/postContext";
 
 const Appbar = () => {
   const { logout, user, token } = useAuth();
-  const { searchPosts } = usePost();
+  const { searchPosts, getPosts } = usePost();
   const handleLogout = () => {
     logout();
   };
@@ -24,6 +24,7 @@ const Appbar = () => {
   }
   const handleSearch = (e) => {
     if (e.target.value.length > 1) searchPosts(e.target.value);
+    else getPosts();
   };
 
   return (
@@ -58,12 +59,12 @@ const Appbar = () => {
           {!user ? (
             <div className="flex gap-2 justify-center">
               <Link to="/signin" className="mt-2 ">
-                <button className="border p-2 px-4 bg-blue-500 text-white ">
+                <button className="border p-2 px-4 rounded-3xl bg-blue-500 hover:bg-blue-400 text-white ">
                   Signin
                 </button>
               </Link>
               <Link to="/signup" className="mt-2 ">
-                <button className="border p-2 px-4 bg-white text-blue-500 ">
+                <button className="border p-2 px-4 rounded-3xl bg-white text-blue-500 hover:bg-gray-100 ">
                   Signup
                 </button>
               </Link>
