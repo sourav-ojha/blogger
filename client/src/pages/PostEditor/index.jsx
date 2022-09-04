@@ -6,8 +6,11 @@ import { Toast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
 import { usePost } from "../../context/postContext";
 import TextEditor from "./TextEditor";
-import * as filestack from "filestack-js";
 import Swal from "sweetalert2";
+// import * as filestack from "filestack-js";
+
+// dynamic import flestack
+const filestack = React.lazy(() => import("filestack-js"));
 
 const client = filestack.init(import.meta.env.VITE_FILE_STACK_API_KEY);
 

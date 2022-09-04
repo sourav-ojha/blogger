@@ -1,0 +1,29 @@
+{
+  "name": "blogger",
+  "version": "1.0.0",
+  "description": "A blog website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client-build": "cd client && rm -r dist && yarn install && yarn build",
+    "move-client": "rm -r server/public && mkdir server/public && mv client/dist/* server/public",
+    "build": "yarn client-build && yarn move-client",
+    "start": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sourav-ojha/blogger.git"
+  },
+  "keywords": [
+    "blog",
+    "react",
+    "nodejs",
+    "MERN"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sourav-ojha/blogger/issues"
+  },
+  "homepage": "https://github.com/sourav-ojha/blogger#readme"
+}
