@@ -29,6 +29,7 @@ export const BlogPostCard = ({ post }) => {
     like_count,
     time_to_read,
     published_date,
+    is_published,
   } = post;
   let published_time_ago = moment(published_date).fromNow();
 
@@ -87,7 +88,13 @@ export const BlogPostCard = ({ post }) => {
             alt="title"
             className="w-full h-full object-cover rounded-md"
           />
-          <div className="absolute top-1 right-1 flex gap-2 ">
+          {/* private tag */}
+          <div className="absolute top-1 right-1 flex item-center gap-2 ">
+            {!is_published && (
+              <div className="  text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
+                Private
+              </div>
+            )}
             <Link
               to={`/blog/${post_id}/edit`}
               className="p-1 text-white bg-orange-500 rounded-md cursor-pointer  "
@@ -105,6 +112,7 @@ export const BlogPostCard = ({ post }) => {
         <Link to={`${url}`}>
           {/* title  */}
           <h3 className="text-3xl pt-5 font-medium">{title}</h3>
+
           <p className="flex gap-2 items-center text-sm pt-2 pb-5 text-gray-500">
             <BsBook className="text-lg" /> {time_to_read} min Read
           </p>

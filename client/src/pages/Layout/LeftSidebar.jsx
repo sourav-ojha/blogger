@@ -1,20 +1,26 @@
 import React from "react";
+import { FaHandPointLeft } from "react-icons/fa";
 import { BsNewspaper } from "react-icons/bs";
 import { NavLink } from "react-router-dom";
 import { usePost } from "../../context/postContext";
 
-const Menu = ({ Icon, label, linkTo = "/" }) => {
+const Menu = ({ Icon, label, linkTo = "/", onClick, active }) => {
   return (
     <li>
       <NavLink
         to={linkTo}
-        className="flex items-center p-2 py-2 text-lg font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+        className={`flex items-center p-2 py-2 text-lg font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700
+        ${active && "border text-blue-500 border-blue-500"}`}
       >
         {Icon && <Icon className="text-xl" />}
-        <span className="ml-3 flex-1 whitespace-nowrap">{label}</span>
-        {/* <span className="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-200">
-          3
-        </span> */}
+        <span className="ml-3 flex-1 whitespace-nowrap" onClick={onClick}>
+          {label}
+        </span>
+        {active && (
+          <span className="inline-flex justify-center items-center p-3 ml-3  h-3 text-sm font-medium">
+            <FaHandPointLeft className="text-blue-500" />
+          </span>
+        )}
       </NavLink>
     </li>
   );
@@ -40,15 +46,27 @@ const LeftSidebar = () => {
   );
 };
 
-export const CategoryBox = ({style}) => {
-  const { category, searchPost } = usePost();
+export const CategoryBox = ({ style }) => {
+  const { category, searchPosts, getPosts } = usePost();
+  const [seslectedCategory, setSeslectedCategory] = React.useState("");
+
+  const handleClick = (val) => {
+    console.log(val);
+    if (val === seslectedCategory) {
+      getPosts();
+      setSeslectedCategory("");
+      return;
+    }
+    searchPosts(val);
+    setSeslectedCategory(val);
+  };
 
   return (
     <div
       className="overflow-y-auto w-52 absolute top-48 right-3 py-4 px-3 bg-white rounded dark:bg-gray-800"
       style={{
         backgroundColor: "rgb(248, 249, 250)",
-        ...style
+        ...style,
       }}
     >
       {/* category heading */}
@@ -58,7 +76,15 @@ export const CategoryBox = ({style}) => {
       <ul className="space-y-1">
         {category &&
           category.length > 0 &&
-          category.map((cat) => <Menu label={cat} linkTo="/" key={cat} />)}
+          category.map((cat) => (
+            <Menu
+              label={cat}
+              linkTo="/"
+              key={cat}
+              onClick={() => handleClick(cat)}
+              active={seslectedCategory === cat}
+            />
+          ))}
       </ul>
     </div>
   );
