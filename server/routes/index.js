@@ -60,6 +60,19 @@ router.get("/blog/private", auth, async (req, res) => {
         res.status(500).json({ msg: "Something went wrong!" });
     }
 });
+
+//Show only my posts
+
+router.get("/blog/my_posts", auth, async (req, res) => {
+    try {
+        const username = decodeJWT(req.header("Authorization").split(" ")[1]);
+        const posts = await Post.find({ username: username }).select({ _id: 0, __v: 0 });
+        res.status(200).send(posts);
+    } catch (err) {
+        res.status(500).json({ msg: "Something went wrong!" });
+    }
+});
+
 //----------------------- Logic to specific post content -----------------------------
 // Get a specific post
 // Send unique post id
