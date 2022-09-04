@@ -1,16 +1,19 @@
 import React, { useEffect } from "react";
 import { usePost } from "../../context/postContext";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsBook } from "react-icons/bs";
 import { marked } from "marked";
 import { Avatar } from "flowbite-react";
 import { AiOutlineDelete, AiOutlineLike } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import Swal from "sweetalert2";
+import { useAuth } from "../../context/AuthContext";
 
 export const BlogPostCard = ({ post }) => {
   const { likePost, deletePost } = usePost();
+  const {user} = useAuth()
+  const navigate = useNavigate()
   const {
     title,
     url,
@@ -28,7 +31,22 @@ export const BlogPostCard = ({ post }) => {
   let published_time_ago = moment(published_date).fromNow();
 
   const handleLike = () => {
-    likePost(post_id);
+    // if no user alert - to send to login page
+    if (!user) {
+      Swal.fire({
+        title: "You are not logged in.",
+        text: "Please sign in to like video",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Signin",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/signin");
+        }
+      });
+    } else likePost(post_id);
   };
 
   const handleDelete = () => {
@@ -122,10 +140,10 @@ export const BlogPostCard = ({ post }) => {
           </Link>
           {/* like */}
           <div
-            className="flex items-center gap-1 text-gray-500 hover:text-blue-500 cursor-pointer  "
+            className="flex items-center gap-1 text-blue-700 hover:text-blue-500 cursor-pointer  "
             onClick={handleLike}
           >
-            <AiOutlineLike className="text-xl" />
+            <AiOutlineLike className="text-xl " />
             <p>{like_count}</p>
           </div>
         </div>

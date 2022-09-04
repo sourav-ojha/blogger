@@ -29,7 +29,7 @@ const LeftSidebar = () => {
         }}
       >
         <ul className="space-y-1">
-          <Menu Icon={BsNewspaper} label="My Feed" linkTo="/" />
+          <Menu Icon={BsNewspaper} label="Feed" linkTo="/" />
           <Menu Icon={BsNewspaper} label="Create Post" linkTo="/blog/create" />
           <Menu Icon={BsNewspaper} label="My Posts" linkTo="/myposts" />
         </ul>

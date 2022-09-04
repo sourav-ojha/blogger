@@ -31,7 +31,7 @@ const Appbar = () => {
       <div className="container flex flex-wrap justify-between items-center mx-auto">
         <Link to="/" className="flex items-center">
           <img
-            src="/profile.jpg"
+            src="/vite.svg"
             className="mr-3 h-6 sm:h-9"
             alt="Flowbite Logo"
           />
@@ -59,12 +59,12 @@ const Appbar = () => {
             <div className="flex gap-2 justify-center">
               <Link to="/signin" className="mt-2 ">
                 <button className="border p-2 px-4 bg-blue-500 text-white ">
-                  signin
+                  Signin
                 </button>
               </Link>
               <Link to="/signup" className="mt-2 ">
                 <button className="border p-2 px-4 bg-white text-blue-500 ">
-                  signup
+                  Signup
                 </button>
               </Link>
             </div>
@@ -77,40 +77,13 @@ const Appbar = () => {
               }
             >
               <Dropdown.Header>
-                {
-                  user && (
-                    <>
-                      <span className="block text-md">{user.full_name}</span>
-                      <span className="block text-sm">( {user.username} )</span>
-                      <span className="block truncate text-sm font-medium">
-                        {user.email}
-                      </span>
-                    </>
-                  )
-                  // : (
-                  //   <>
-                  //     {/* please login  */}
-                  //     <span className="block text-sm">Please Login</span>
-                  //     <span className="block truncate text-sm font-medium">
-                  //       to access your profile
-                  //     </span>
-                  //     {/* divider */}
-                  //     <div className="my-2 border-t border-gray-200"></div>
-                  //     <div className="flex gap-2 justify-center">
-                  //       <Link to="/signin" className="mt-2 ">
-                  //         <button className="border p-2 px-4 bg-blue-500 text-white ">
-                  //           signin
-                  //         </button>
-                  //       </Link>
-                  //       <Link to="/signup" className="mt-2 ">
-                  //         <button className="border p-2 px-4 bg-white text-blue-500 ">
-                  //           signup
-                  //         </button>
-                  //       </Link>
-                  //     </div>
-                  //   </>
-                  // )
-                }
+                <>
+                  <span className="block text-md">{user.full_name}</span>
+                  <span className="block text-sm">( {user.username} )</span>
+                  <span className="block truncate text-sm font-medium">
+                    {user.email}
+                  </span>
+                </>
               </Dropdown.Header>
               {/* <Dropdown.Item>Dashboard</Dropdown.Item> */}
               {/* <Dropdown.Item>Settings</Dropdown.Item> */}

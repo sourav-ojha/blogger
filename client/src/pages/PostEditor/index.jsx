@@ -160,11 +160,7 @@ const PostEditor = () => {
       <nav className="bg-gray-50 border-gray-200 px-2 sm:px-4 py-4 rounded dark:bg-gray-900">
         <div className="container flex flex-wrap justify-between items-center mx-auto">
           <Link to="/" className="flex items-center">
-            <img
-              src="/profile.jpg"
-              className="mr-3 h-6 sm:h-9"
-              alt="Flowbite Logo"
-            />
+            <img src="/vite.svg" className="mr-3 h-6 sm:h-9" alt=" Logo" />
             <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
               Blogger
             </span>

@@ -4,10 +4,14 @@ import { AiOutlineLike } from "react-icons/ai";
 import { Avatar } from "flowbite-react";
 import moment from "moment";
 import { BsBook } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { marked } from "marked";
+import { useAuth } from "../../context/AuthContext";
+import Swal from "sweetalert2";
 const BlogPostCard = ({ post }) => {
   const { likePost } = usePost();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const {
     title,
     url,
@@ -25,7 +29,22 @@ const BlogPostCard = ({ post }) => {
   let published_time_ago = moment(published_date).fromNow();
 
   const handleLike = () => {
-    likePost(post_id);
+    // if no user alert - to send to login page
+    if (!user) {
+      Swal.fire({
+        title: "You are not logged in.",
+        text: "Please sign in to like video",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Signin",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/signin");
+        }
+      });
+    } else likePost(post_id);
   };
   return (
     <div
@@ -56,7 +75,12 @@ const BlogPostCard = ({ post }) => {
           />
           <div className="flex gap-3 pt-4 items-center">
             {/* small rounded image */}
-            <Avatar alt="User settings" size="md" rounded={true} />
+            <Avatar
+              alt="User settings"
+              img="/profile.jpg"
+              size="md"
+              rounded={true}
+            />
             <div className="flex flex-col  ">
               <p className="text-sm text-gray-500">{full_name}</p>
               <p className="text-sm text-gray-500">{published_time_ago}</p>
@@ -86,7 +110,7 @@ const BlogPostCard = ({ post }) => {
           </Link>
           {/* like */}
           <div
-            className="flex items-center gap-1 text-gray-500 hover:text-blue-500 cursor-pointer  "
+            className="flex items-center gap-1 text-blue-700 hover:text-blue-500 cursor-pointer  "
             onClick={handleLike}
           >
             <AiOutlineLike className="text-xl" />

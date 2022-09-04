@@ -15,7 +15,12 @@ const BlogPostCard = ({ post }) => {
       className="w-10/12 p-4 flex  gap-3 rounded-md  border-b justify-between hover:shadow-lg transition-all duration-300 cursor-pointer "
     >
       <div className="w-12 h-12">
-        <Avatar alt="User settings" size="md" rounded={true} />
+        <Avatar
+          alt="User settings"
+          img={post.cover_img}
+          size="md"
+          rounded={true}
+        />
       </div>
       <div className="w-full flex-1 flex flex-col justify-between">
         <h3 className="text-xl  font-medium">{post.title}</h3>
@@ -23,7 +28,7 @@ const BlogPostCard = ({ post }) => {
         {/* likes */}
         <div className="flex items-center gap-5 pt-1 text-lg text-gray-500">
           <div className="text-sm text-gray-500">{published_time_ago}</div>
-          <div className="flex gap-1  text-md text-gray-500">
+          <div className="flex gap-1  text-md text-blue-700">
             <AiOutlineLike className="text-2xl" />
             <p> {post.like_count}</p>
           </div>

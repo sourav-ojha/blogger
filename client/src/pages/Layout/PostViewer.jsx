@@ -1,20 +1,36 @@
 import React from "react";
 import { BsBook } from "react-icons/bs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { usePost } from "../../context/postContext";
 import { Avatar } from "flowbite-react";
 import { AiOutlineLike } from "react-icons/ai";
 import { marked } from "marked";
+import { useAuth } from "../../context/AuthContext";
 const PostViewer = () => {
   const params = useParams();
-
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const { post, getPost, likePost } = usePost();
   React.useEffect(() => {
     getPost(params.id);
   }, [params.id]);
-
   const handleLike = () => {
-    likePost(post.post_id);
+    // if no user alert - to send to login page
+    if (!user) {
+      Swal.fire({
+        title: "You are not logged in.",
+        text: "Please sign in to like video",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Signin",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/signin");
+        }
+      });
+    } else likePost(post.post_id);
   };
 
   return (
@@ -57,21 +73,26 @@ const PostViewer = () => {
           <div className="flex justify-between ">
             <div className="flex gap-3 pt-4 items-center">
               {/* small rounded image */}
-              <Avatar alt="User settings" size="md" rounded={true} />
+              <Avatar
+                alt="User settings"
+                img="/profile.jpg"
+                size="md"
+                rounded={true}
+              />
               <div className="flex flex-col  ">
                 <p className="text-sm text-gray-500">{post.full_name}</p>
                 <p className="text-sm text-gray-500">
-                  {post.published_time_ago}
+                  {new Date(post.published_date).toDateString()}
                 </p>
               </div>
             </div>
             <div className="flex gap-3 pt-4 items-center">
               {/* like button */}
               <button
-                className="flex gap-2 items-center text-sm text-gray-500 p-2 rounded-sm border "
+                className="flex gap-2 items-center text-sm text-blue-700 p-2 rounded-sm border "
                 onClick={handleLike}
               >
-                <AiOutlineLike className="text-lg" /> {post.like_count}
+                <AiOutlineLike className="text-xl" /> {post.like_count}
               </button>
             </div>
           </div>
