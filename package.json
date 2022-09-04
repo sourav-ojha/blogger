@@ -1,29 +1,33 @@
 {
-  "name": "blogger",
+  "name": "tech-a-thon",
   "version": "1.0.0",
-  "description": "A blog website",
+  "description": "This is a blog website",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "client-build": "cd client && rm -r dist && yarn install && yarn build",
-    "move-client": "rm -r server/public && mkdir server/public && mv client/dist/* server/public",
-    "build": "yarn client-build && yarn move-client",
-    "start": "node server/index.js"
+    "move-client": "rm -r public && mkdir public && mv client/dist/* public",
+    "build": "yarn client-build && yarn move-client && yarn install"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sourav-ojha/blogger.git"
-  },
-  "keywords": [
-    "blog",
-    "react",
-    "nodejs",
-    "MERN"
-  ],
-  "author": "",
+  "author": "Sourav ojha",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sourav-ojha/blogger/issues"
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "express-rate-limit": "^6.5.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongo-sanitize": "^1.1.0",
+    "mongoose": "^6.5.4",
+    "nodemon": "^2.0.19",
+    "path": "^0.12.7",
+    "validator": "^13.7.0"
   },
-  "homepage": "https://github.com/sourav-ojha/blogger#readme"
+  "engines": {
+    "node": ">=12.0.0"
+  }
 }

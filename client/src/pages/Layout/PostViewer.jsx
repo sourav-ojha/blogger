@@ -15,9 +15,17 @@ const PostViewer = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { post, getPost, likePost } = usePost();
+  const topRef = React.useRef(null);
   React.useEffect(() => {
     getPost(params.id);
   }, [params.id]);
+
+  React.useEffect(() => {
+    if (topRef.current) {
+      topRef.current.scrollIntoView();
+    }
+  }, [post]);
+
   const handleLike = () => {
     console.log("sjs", user);
     // if no user alert - to send to login page
@@ -51,8 +59,8 @@ const PostViewer = () => {
   return (
     post && (
       <div
-        // to={`/${url}`}
-        className="w-full h-full p-4 flex flex-col  justify-between    "
+        ref={topRef}
+        className="w-full h-full p-4 flex flex-col justify-between "
       >
         <div className="w-full flex-1 flex flex-col justify-between">
           {/* cover image  */}

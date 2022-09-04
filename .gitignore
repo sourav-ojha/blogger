@@ -1,5 +1,8 @@
 **/node_modules
 
 client/dist
+client/.env
 .env
-server/public
+
+server/.env
+public
