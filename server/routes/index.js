@@ -102,7 +102,7 @@ router.get("/blog/:post_id/", async (req, res) => {
 router.post("/blog", auth, async (req, res) => {
     let { title, content, keywords, category, cover_img, is_published } = sanitize(req.body); // Sanitize the data to prevent injection attacks
 
-    if (title && content && keywords && category && is_published) {
+    if (title && content && keywords && category && cover_img) {
         // Create a new post
 
         try {
@@ -148,7 +148,7 @@ router.patch("/blog/:post_id", auth, async (req, res) => {
     let post_id = sanitize(req.params.post_id);
     let { title, content, keywords, category, is_published, cover_img } = sanitize(req.body);
 
-    if ((post_id && title && content && keywords && category, is_published)) {
+    if (post_id && title && content && keywords && category) {
         try {
             let url = title.replace(/\s+/g, "-");
             url = "/blog/" + post_id.toString() + "/" + url;
@@ -166,15 +166,9 @@ router.patch("/blog/:post_id", auth, async (req, res) => {
                     is_published: is_published,
                     time_to_read: time_to_read,
                     published_date: Date.now(),
-                },
-                (err) => {
-                    if (err) {
-                        return res.status(400).json({ msg: "Something went wrong" });
-                    } else {
-                        return res.status(200).json({ msg: "Post updated successfully" });
-                    }
                 }
             );
+            return res.status(200).json({ msg: "Post updated successfully" });
         } catch (err) {
             return res.status(400).json({ msg: "Something went wrong!" });
         }
