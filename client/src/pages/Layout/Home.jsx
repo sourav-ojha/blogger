@@ -33,7 +33,7 @@ const BlogPostCard = ({ post }) => {
     if (!user) {
       Swal.fire({
         title: "You are not logged in.",
-        text: "Please sign in to like video",
+        text: "Please sign in to like this post",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

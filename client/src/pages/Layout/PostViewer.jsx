@@ -6,6 +6,7 @@ import { Avatar } from "flowbite-react";
 import { AiOutlineLike } from "react-icons/ai";
 import { marked } from "marked";
 import { useAuth } from "../../context/AuthContext";
+import Swal from "sweetalert2";
 const PostViewer = () => {
   const params = useParams();
   const { user } = useAuth();
@@ -15,11 +16,12 @@ const PostViewer = () => {
     getPost(params.id);
   }, [params.id]);
   const handleLike = () => {
+    console.log("sjs", user);
     // if no user alert - to send to login page
     if (!user) {
       Swal.fire({
         title: "You are not logged in.",
-        text: "Please sign in to like video",
+        text: "Please sign in to like this post",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -70,6 +72,9 @@ const PostViewer = () => {
             className="default_style ds"
             dangerouslySetInnerHTML={{ __html: marked.parse(post.content) }}
           />
+          {/* empty div */}
+          <div className="h-10"></div>
+
           <div className="flex justify-between ">
             <div className="flex gap-3 pt-4 items-center">
               {/* small rounded image */}
