@@ -10,7 +10,7 @@
     "move-client-dev": "rm -r public && mkdir public && mv client/dist/* public",
     "client-build": "cd client  && yarn install && yarn build",
     "move-client": "mkdir public && mv client/dist/* public",
-    "build": "yarn client-build && yarn move-client && yarn install",
+    "precommit": "yarn client-build && yarn move-client && yarn install",
     "build-local": "yarn client-build-dev && yarn move-client-dev && yarn install"
   },
   "author": "Sourav ojha",
