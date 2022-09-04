@@ -9,6 +9,7 @@ const Post = require("../models/Posts");
 const crypto = require("crypto");
 const User = require("../models/User");
 const Likes = require("../models/Likes");
+const { type } = require("os");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -84,11 +85,21 @@ router.get("/blog/:post_id/", async (req, res) => {
 
     if (post_id) {
         try {
-            let post = await Post.findOne({ post_id: post_id, is_published: true }).select({ _id: 0, __v: 0 });
-            if (post) {
-                res.status(200).send(post);
+            const username = decodeJWT(req.header("Authorization").split(" ")[1]);
+            if (!username) {
+                let post = await Post.findOne({ post_id: post_id, is_published: true }).select({ _id: 0, __v: 0 });
+                if (post) {
+                    res.status(200).send(post);
+                } else {
+                    res.status(404).send({ msg: "Post not found!" });
+                }
             } else {
-                res.status(404).send({ msg: "Post not found!" });
+                let post = await Post.findOne({ username: username, post_id: post_id }).select({ _id: 0, __v: 0 });
+                if (post) {
+                    res.status(200).send(post);
+                } else {
+                    res.status(404).send({ msg: "Post not found!" });
+                }
             }
         } catch (err) {
             return res.status(500).send({ msg: "Something went wrong!" });
@@ -153,7 +164,6 @@ router.patch("/blog/:post_id", auth, async (req, res) => {
             let url = title.replace(/\s+/g, "-");
             url = "/blog/" + post_id.toString() + "/" + url;
             let time_to_read = Math.round(content.split(" ").length / 200);
-
             await Post.findOneAndUpdate(
                 { post_id: post_id },
                 {
