@@ -4,7 +4,9 @@ import React from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { BsBook } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import { usePost } from "../../context/postContext";
+import { CategoryBox } from "./LeftSidebar";
 
 const BlogPostCard = ({ post }) => {
   let published_time_ago = moment(post.published_date).fromNow();
@@ -40,21 +42,47 @@ const BlogPostCard = ({ post }) => {
 
 const RightSidebar = () => {
   const { trendingPosts } = usePost();
+  const { user } = useAuth();
   return (
     <aside className="w-full relative " aria-label="Sidebar">
-      <div className="overflow-y-auto w-96 h-[89vh] absolute top-3 left-3 py-4 px-3 bg-white rounded-md dark:bg-gray-800">
-        <div className="w-full  p-1 flex justify-between items-center ">
-          <h3 className="text-3xl font-semibold right_sidebar_heading ">
-            Trending
-          </h3>
-          <div className="p-2 px-4 rounded-4xl border">See All</div>
+      {user ? (
+        <div className="overflow-y-auto w-96 h-[89vh] absolute top-3 left-3 py-4 px-3 bg-white rounded-md dark:bg-gray-800">
+          <div className="w-full  p-1 flex justify-between items-center ">
+            <h3 className="text-3xl font-semibold right_sidebar_heading ">
+              Trending
+            </h3>
+            <div className="p-2 px-4 rounded-4xl border">See All</div>
+          </div>
+          <ul className="space-y-1">
+            {trendingPosts.map((post) => (
+              <BlogPostCard post={post} key={post.post_id} />
+            ))}
+          </ul>
         </div>
-        <ul className="space-y-1">
-          {trendingPosts.map((post) => (
-            <BlogPostCard post={post} key={post.post_id} />
-          ))}
-        </ul>
-      </div>
+      ) : (
+        <>
+          <div className="overflow-y-auto w-96 h-[56vh] absolute top-3 left-3 py-4 px-3 bg-white rounded-md dark:bg-gray-800">
+            <div className="w-full  p-1 flex justify-between items-center ">
+              <h3 className="text-3xl font-semibold right_sidebar_heading ">
+                Trending
+              </h3>
+              <div className="p-2 px-4 rounded-4xl border">See All</div>
+            </div>
+            <ul className="space-y-1">
+              {trendingPosts.map((post) => (
+                <BlogPostCard post={post} key={post.post_id} />
+              ))}
+            </ul>
+          </div>
+          <CategoryBox
+            style={{
+              width: "24rem",
+              top: "58vh",
+              left: "12px",
+            }}
+          />
+        </>
+      )}
     </aside>
   );
 };

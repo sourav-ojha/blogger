@@ -10,6 +10,7 @@ const initialState = {
   myPosts: [],
   post: null,
   trendingPosts: [],
+  category: [],
   isFetching: false,
   isError: false,
   errorMessage: "",
@@ -31,6 +32,12 @@ const reducer = (state, action) => {
         posts: action.payload.sort(
           (a, b) => new Date(b.published_date) - new Date(a.published_date)
         ),
+      };
+    case "SET_CATEGORY":
+      return {
+        ...state,
+        // get category in array then make set to remove duplicate
+        category: [...new Set(action.payload.map((post) => post.category))],
       };
     case "GET_MY_POSTS":
       return {
@@ -110,6 +117,7 @@ const PostProvider = ({ children }) => {
       const res = await postApi.getPosts();
       dispatch({ type: "GET_POSTS", payload: res.data });
       dispatch({ type: "SET_TRENDING_POSTS", payload: res.data });
+      dispatch({ type: "SET_CATEGORY", payload: res.data });
     } catch (err) {
       dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
     }

@@ -114,6 +114,7 @@ const PostEditor = () => {
       keywords: state.keywords.split(","),
       category: state.category,
       cover_img: state.coverImage,
+      is_published: state.is_published,
     };
     if (post_id && post_id !== "create") {
       updatePost(post_id, payload);
