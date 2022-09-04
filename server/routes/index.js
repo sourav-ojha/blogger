@@ -100,9 +100,9 @@ router.get("/blog/:post_id/", async (req, res) => {
 
 // Create Post
 router.post("/blog", auth, async (req, res) => {
-    let { title, content, keywords, category, cover_img } = sanitize(req.body); // Sanitize the data to prevent injection attacks
+    let { title, content, keywords, category, cover_img, is_published } = sanitize(req.body); // Sanitize the data to prevent injection attacks
 
-    if (title && content && keywords && category) {
+    if (title && content && keywords && category && is_published) {
         // Create a new post
 
         try {
@@ -123,7 +123,7 @@ router.post("/blog", auth, async (req, res) => {
                 category: category,
                 full_name: user_data.full_name,
                 username: user_data.username,
-                is_published: true,
+                is_published: is_published,
                 cover_img: cover_img,
                 time_to_read: time_to_read,
                 published_date: Date.now(),
@@ -138,7 +138,7 @@ router.post("/blog", auth, async (req, res) => {
             return res.status(400).json({ msg: "Something went wrong!" });
         }
     } else {
-        return res.status(400).json({ msg: "Please provide a title, content, category and keywords!" });
+        return res.status(400).json({ msg: "Please provide a title, content, category, is_published and keywords!" });
     }
 });
 
