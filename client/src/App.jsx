@@ -23,11 +23,11 @@ function App() {
           </Route>
 
           <Route path="/blog/create" element={<PostEditor />} />
+          <Route path="blog/:id/edit" element={<PostEditor />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="/myposts" element={<MyPosts />} />
+            <Route path="myposts" element={<MyPosts />} />
             <Route path="blog/:id/:name" element={<PostViewer />} />
-            {/* <Route path="blog/:id/edit" element={<PostViewer />} /> */}
           </Route>
           <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>

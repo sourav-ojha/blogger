@@ -108,9 +108,15 @@ const PostProvider = ({ children }) => {
   const searchPosts = async (q) => {
     try {
       const res = await postApi.searchPosts(q);
+      console.log(res.data);
+      if (!!res.data.msg) throw new Error(res.data.msg);
       dispatch({ type: "GET_POSTS", payload: res.data });
     } catch (err) {
-      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
+      dispatch({ type: "GET_POSTS", payload: [] });
+      dispatch({
+        type: "ERROR_MESSAGE",
+        payload: err.response.data.msg || err.message,
+      });
     }
     clearMessage();
   };
@@ -154,6 +160,26 @@ const PostProvider = ({ children }) => {
     clearMessage();
   };
 
+  const updatePost = async (id, data) => {
+    try {
+      const res = await postApi.updatePost(id, data);
+      dispatch({ type: "SUCCESS_MESSAGE", payload: res.data.msg });
+    } catch (err) {
+      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
+    }
+    clearMessage();
+  };
+
+  const deletePost = async (id) => {
+    try {
+      const res = await postApi.deletePost(id);
+      dispatch({ type: "SUCCESS_MESSAGE", payload: res.data.msg });
+    } catch (err) {
+      dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
+    }
+    clearMessage();
+  };
+
   const likePost = async (post_id) => {
     try {
       const res = await postApi.likePost(post_id);
@@ -186,6 +212,8 @@ const PostProvider = ({ children }) => {
         getPost,
         searchPosts,
         getMyPosts,
+        updatePost,
+        deletePost,
       }}
     >
       {children}

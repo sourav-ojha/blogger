@@ -13,6 +13,10 @@ const createPost = async (post) => {
   return await httpClient(`${API_URL}/blog`, "POST", post);
 };
 
+const updatePost = async (post_id, post) => {
+  return await httpClient(`${API_URL}/blog/${post_id}`, "PATCH", post);
+};
+
 const deletePost = async (post_id) => {
   return await httpClient(`${API_URL}/blog/${post_id}`, "DELETE");
 };
@@ -37,6 +41,7 @@ let postApi = {
   getPost,
   createPost,
   deletePost,
+  updatePost,
   likePost,
   searchPosts,
   getMyPosts,

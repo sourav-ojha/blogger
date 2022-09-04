@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { MdCancel } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Toast } from "../../components/Toast";
 import { useAuth } from "../../context/AuthContext";
 import { usePost } from "../../context/postContext";
@@ -13,6 +13,19 @@ const client = filestack.init(import.meta.env.VITE_FILE_STACK_API_KEY);
 const PostEditor = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const {
+    createPost,
+    isError,
+    errorMessage,
+    successMessage,
+    post,
+    getPost,
+    updatePost,
+    deletePost,
+  } = usePost();
+  const params = useParams();
+
+  const post_id = params.id;
 
   const [state, setState] = React.useState({
     title: "",
@@ -21,6 +34,33 @@ const PostEditor = () => {
     category: "",
     coverImage: "",
   });
+  const [isCategoryEnabled, setIsCategoryEnabled] = React.useState(false);
+  const [isKeywordsEnabled, setIsKeywordsEnabled] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    if (post_id && post_id !== "create") {
+      setIsLoading(true);
+      getPost(post_id);
+    }
+  }, [post_id]);
+  useEffect(() => {
+    if (post && post.username !== user.username) {
+      navigate("/");
+    }
+    if (post && post.username === user.username && post_id === post.post_id) {
+      setIsCategoryEnabled(true);
+      setIsKeywordsEnabled(true);
+      setState({
+        title: post.title,
+        content: post.content,
+        keywords: post.keywords.join(","),
+        category: post.category,
+        coverImage: post.cover_img,
+      });
+      setIsLoading(false);
+    }
+  }, [post_id, post]);
 
   const options = {
     accept: "image/*",
@@ -43,13 +83,7 @@ const PostEditor = () => {
     if (!user) {
       navigate("/signin");
     }
-  });
-
-  const { createPost, isError, errorMessage, successMessage } = usePost();
-
-  const [isCategoryEnabled, setIsCategoryEnabled] = React.useState(false);
-  const [isKeywordsEnabled, setIsKeywordsEnabled] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
+  }, []);
 
   const toggleCategory = () => {
     setIsCategoryEnabled(!isCategoryEnabled);
@@ -65,15 +99,20 @@ const PostEditor = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     setIsLoading(true);
     let payload = {
       title: state.title,
       content: state.content,
       keywords: state.keywords.split(","),
       category: state.category,
-      img: state.coverImage,
+      cover_img: state.coverImage,
     };
-    createPost(payload);
+    if (post_id && post_id !== "create") {
+      updatePost(post_id, payload);
+    } else {
+      createPost(payload);
+    }
   };
 
   useEffect(() => {
@@ -90,10 +129,15 @@ const PostEditor = () => {
         title: successMessage,
       });
       setIsLoading(false);
+      navigate("/");
     }
   }, [isError, successMessage]);
 
-  return (
+  return isLoading ? (
+    <div className="flex justify-center items-center h-screen">
+      <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+    </div>
+  ) : (
     <div className="w-screen h-screen flex flex-col ">
       {/* Navbar */}
       <nav className="bg-gray-50 border-gray-200 px-2 sm:px-4 py-4 rounded dark:bg-gray-900">
@@ -109,6 +153,17 @@ const PostEditor = () => {
             </span>
           </Link>
           <div className="flex gap-2 md:order-2">
+            {/* Delete Button */}
+            {post_id && post_id !== "create" && (
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                onClick={() => {
+                  deletePost(post_id);
+                }}
+              >
+                Delete
+              </button>
+            )}
             {/* save button  */}
             <button
               className="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded"
@@ -138,7 +193,7 @@ const PostEditor = () => {
         {!!state.coverImage && (
           <div>
             <img
-              src={state.cover_image}
+              src={state.coverImage}
               alt="cover_image"
               className="w-full h-96 object-cover"
             />
@@ -169,6 +224,7 @@ const PostEditor = () => {
           type="text"
           name="title"
           id="title"
+          value={state.title}
           onChange={handleChange}
           placeholder="Blog Title ..."
           className="w-full px-4 text-3xl mt-3  font-semibold placeholder:text-gray-500 placeholder:font-bold outline-none border-none focus:ring-0  focus:outline-none "
@@ -180,6 +236,7 @@ const PostEditor = () => {
                 type="text"
                 name="keywords"
                 id="keywords"
+                value={state.keywords}
                 onChange={handleChange}
                 placeholder="Keywords (seperated by comma) "
                 className="w-full px-4 text-2xl font-medium placeholder:text-gray-500 placeholder:font-semibold outline-none border-none focus:ring-0  focus:outline-none "
@@ -195,6 +252,7 @@ const PostEditor = () => {
                 type="text"
                 name="category"
                 id="category"
+                value={state.category}
                 onChange={handleChange}
                 placeholder="Enter category "
                 className="w-full px-4 text-2xl font-medium placeholder:text-gray-500 placeholder:font-semibold outline-none border-none focus:ring-0  focus:outline-none "

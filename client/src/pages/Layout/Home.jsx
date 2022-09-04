@@ -6,7 +6,7 @@ import moment from "moment";
 import { BsBook } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { marked } from "marked";
- const BlogPostCard = ({ post }) => {
+const BlogPostCard = ({ post }) => {
   const { likePost } = usePost();
   const {
     title,
@@ -109,9 +109,11 @@ const Home = () => {
 
   return (
     <ul className="space-y-4  flex flex-col items-center ">
-      {posts &&
-        posts.length > 0 &&
-        posts.map((post) => <BlogPostCard post={post} key={post.post_id} />)}
+      {posts && posts.length > 0 ? (
+        posts.map((post) => <BlogPostCard post={post} key={post.post_id} />)
+      ) : (
+        <p className="text-2xl text-gray-500">No posts found</p>
+      )}
     </ul>
   );
 };

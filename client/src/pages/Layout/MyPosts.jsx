@@ -14,6 +14,7 @@ export const BlogPostCard = ({ post }) => {
     title,
     url,
     content,
+    cover_img,
     post_id,
     keywords,
     username,
@@ -34,13 +35,16 @@ export const BlogPostCard = ({ post }) => {
         {/* cover image  */}
         <div className="w-full h-64 relative bg-gray-200 rounded-md">
           <img
-            src="/profile.jpg"
+            src={cover_img || "/profile.jpg"}
             alt="title"
             className="w-full h-full object-cover rounded-md"
           />
-          <div className="absolute top-0 right-0 p-2 bg-gray-900 bg-opacity-50 rounded-md cursor-pointer ">
+          <Link
+            to={`/blog/${post_id}/edit`}
+            className="absolute top-0 right-0 p-2 bg-gray-900 bg-opacity-50 rounded-md cursor-pointer "
+          >
             <BiEdit className="text-4xl bg-red-500" />
-          </div>
+          </Link>
         </div>
         <Link to={`${url}`}>
           {/* title  */}
@@ -115,11 +119,11 @@ const MyPosts = () => {
 
   return (
     myPosts && (
-      <div>
+      <ul className="space-y-4  flex flex-col items-center ">
         {myPosts.map((post) => (
           <BlogPostCard key={post.post_id} post={post} />
         ))}
-      </div>
+      </ul>
     )
   );
 };
