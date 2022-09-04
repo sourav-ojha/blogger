@@ -162,6 +162,7 @@ router.patch("/blog/:post_id", auth, async (req, res) => {
                     content: content,
                     keywords: keywords,
                     category: category,
+                    cover_img: cover_img,
                     is_published: is_published,
                     time_to_read: time_to_read,
                     published_date: Date.now(),
