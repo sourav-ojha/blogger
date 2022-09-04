@@ -1,10 +1,8 @@
 import React from "react";
 import { BsNewspaper } from "react-icons/bs";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 
 const Menu = ({ Icon, label, linkTo = "/" }) => {
-  const { token } = useAuth();
   return (
     <li>
       <NavLink
@@ -33,9 +31,7 @@ const LeftSidebar = () => {
         <ul className="space-y-1">
           <Menu Icon={BsNewspaper} label="My Feed" linkTo="/" />
           <Menu Icon={BsNewspaper} label="Create Post" linkTo="/blog/create" />
-          {token && (
-            <Menu Icon={BsNewspaper} label="My Posts" linkTo="/myposts" />
-          )}
+          <Menu Icon={BsNewspaper} label="My Posts" linkTo="/myposts" />
         </ul>
       </div>
     </aside>

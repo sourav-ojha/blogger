@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import { usePost } from "../../context/postContext";
 import TextEditor from "./TextEditor";
 import * as filestack from "filestack-js";
+import Swal from "sweetalert2";
 
 const client = filestack.init(import.meta.env.VITE_FILE_STACK_API_KEY);
 
@@ -115,6 +116,22 @@ const PostEditor = () => {
     }
   };
 
+  const handleDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deletePost(post_id);
+      }
+    });
+  };
+
   useEffect(() => {
     if (isError) {
       Toast.fire({
@@ -157,9 +174,7 @@ const PostEditor = () => {
             {post_id && post_id !== "create" && (
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                onClick={() => {
-                  deletePost(post_id);
-                }}
+                onClick={handleDelete}
               >
                 Delete
               </button>

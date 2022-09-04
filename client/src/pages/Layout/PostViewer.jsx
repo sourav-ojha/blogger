@@ -3,14 +3,19 @@ import { BsBook } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { usePost } from "../../context/postContext";
 import { Avatar } from "flowbite-react";
+import { AiOutlineLike } from "react-icons/ai";
 import { marked } from "marked";
 const PostViewer = () => {
   const params = useParams();
 
-  const { post, getPost } = usePost();
+  const { post, getPost, likePost } = usePost();
   React.useEffect(() => {
     getPost(params.id);
   }, [params.id]);
+
+  const handleLike = () => {
+    likePost(post.post_id);
+  };
 
   return (
     post && (
@@ -49,17 +54,30 @@ const PostViewer = () => {
             className="default_style ds"
             dangerouslySetInnerHTML={{ __html: marked.parse(post.content) }}
           />
-          <div className="flex gap-3 pt-4 items-center">
-            {/* small rounded image */}
-            <Avatar
-              alt="User settings"
-              img="/profile.jpg"
-              size="md"
-              rounded={true}
-            />
-            <div className="flex flex-col  ">
-              <p className="text-sm text-gray-500">{post.full_name}</p>
-              <p className="text-sm text-gray-500">{post.published_time_ago}</p>
+          <div className="flex justify-between ">
+            <div className="flex gap-3 pt-4 items-center">
+              {/* small rounded image */}
+              <Avatar
+                alt="User settings"
+                img="/profile.jpg"
+                size="md"
+                rounded={true}
+              />
+              <div className="flex flex-col  ">
+                <p className="text-sm text-gray-500">{post.full_name}</p>
+                <p className="text-sm text-gray-500">
+                  {post.published_time_ago}
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 pt-4 items-center">
+              {/* like button */}
+              <button
+                className="flex gap-2 items-center text-sm text-gray-500 p-2 rounded-sm border "
+                onClick={handleLike}
+              >
+                <AiOutlineLike className="text-lg" /> {post.like_count}
+              </button>
             </div>
           </div>
 

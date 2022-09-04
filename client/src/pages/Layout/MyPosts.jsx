@@ -7,9 +7,10 @@ import { marked } from "marked";
 import { Avatar } from "flowbite-react";
 import { AiOutlineLike } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
 
 export const BlogPostCard = ({ post }) => {
-  const { likePost } = usePost();
+  const { likePost, deletePost } = usePost();
   const {
     title,
     url,
@@ -29,6 +30,23 @@ export const BlogPostCard = ({ post }) => {
   const handleLike = () => {
     likePost(post_id);
   };
+
+  const handleDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deletePost(post_id);
+      }
+    });
+  };
+
   return (
     <div className="w-10/12 h-full p-4 flex flex-col  rounded-md shadow-sm justify-between hover:shadow-lg transition-all duration-300   ">
       <div className="w-full flex-1 flex flex-col justify-between">
@@ -43,8 +61,14 @@ export const BlogPostCard = ({ post }) => {
             to={`/blog/${post_id}/edit`}
             className="absolute top-0 right-0 p-2 bg-gray-900 bg-opacity-50 rounded-md cursor-pointer "
           >
-            <BiEdit className="text-4xl bg-red-500" />
+            <BiEdit className="text-4xl bg-orange-500" />
           </Link>
+          <div
+            className="absolute top-0 right-0 p-2 bg-gray-900 bg-opacity-50 rounded-md cursor-pointer "
+            onClick={handleDelete}
+          >
+            <MdDelete className="text-4xl bg-red-500" />
+          </div>
         </div>
         <Link to={`${url}`}>
           {/* title  */}

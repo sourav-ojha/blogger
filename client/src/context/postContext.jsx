@@ -61,6 +61,14 @@ const reducer = (state, action) => {
           return post;
         }),
       };
+    case "REMOVE_POST":
+      return {
+        ...state,
+        posts: state.posts.filter((post) => post.post_id !== action.payload),
+        trendingPosts: state.trendingPosts.filter(
+          (post) => post.post_id !== action.payload
+        ),
+      };
 
     case "SUCCESS_MESSAGE":
       return {
@@ -124,6 +132,9 @@ const PostProvider = ({ children }) => {
   const getUpdatedPost = async (id) => {
     try {
       const res = await postApi.getPost(id);
+      if (!!state.post) {
+        dispatch({ type: "GET_POST", payload: res.data });
+      }
       dispatch({ type: "UPDATE_POST_DETAIL", payload: res.data });
     } catch (err) {
       dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
@@ -173,6 +184,7 @@ const PostProvider = ({ children }) => {
   const deletePost = async (id) => {
     try {
       const res = await postApi.deletePost(id);
+      dispatch({ type: "REMOVE_POST", payload: id });
       dispatch({ type: "SUCCESS_MESSAGE", payload: res.data.msg });
     } catch (err) {
       dispatch({ type: "ERROR_MESSAGE", payload: err.response.data.msg });
@@ -184,6 +196,7 @@ const PostProvider = ({ children }) => {
     try {
       const res = await postApi.likePost(post_id);
       await getUpdatedPost(post_id);
+
       console.log(res);
       dispatch({ type: "SUCCESS_MESSAGE", payload: res.data.msg });
     } catch (err) {
