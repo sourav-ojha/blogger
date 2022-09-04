@@ -203,7 +203,8 @@ router.delete("/blog/:post_id", auth, async (req, res) => {
 
             if (actual_owner_of_post) {
                 //Deelte post from post collection
-                await Post.deleteOne({ post_id: post_id });
+                await Post.deleteOne({ post_id: post_id }); // Delete post from post collection
+                await Likes.deleteOne({ post_id: post_id }); // Delete post from likes collection
                 res.status(200).json({ msg: "Post deleted successfully" });
             } else {
                 return res.json({ msg: "You are not the owner of this post!" });
