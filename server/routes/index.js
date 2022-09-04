@@ -100,7 +100,7 @@ router.get("/blog/:post_id/", async (req, res) => {
 
 // Create Post
 router.post("/blog", auth, async (req, res) => {
-    let { title, content, keywords, category } = sanitize(req.body); // Sanitize the data to prevent injection attacks
+    let { title, content, keywords, category, cover_img } = sanitize(req.body); // Sanitize the data to prevent injection attacks
 
     if (title && content && keywords && category) {
         // Create a new post
@@ -146,7 +146,7 @@ router.post("/blog", auth, async (req, res) => {
 
 router.patch("/blog/:post_id", auth, async (req, res) => {
     let post_id = sanitize(req.params.post_id);
-    let { title, content, keywords, category, is_published } = sanitize(req.body);
+    let { title, content, keywords, category, is_published, cover_img } = sanitize(req.body);
 
     if ((post_id && title && content && keywords && category, is_published)) {
         try {
