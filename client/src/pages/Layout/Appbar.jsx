@@ -23,7 +23,7 @@ const Appbar = () => {
     };
   }
   const handleSearch = (e) => {
-    if (e.target.value > 1) searchPosts(e.target.value);
+    if (e.target.value.length > 1) searchPosts(e.target.value);
   };
 
   return (
