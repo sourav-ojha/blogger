@@ -34,6 +34,7 @@ const PostEditor = () => {
     keywords: "",
     category: "",
     coverImage: "",
+    is_published: false,
   });
   const [isCategoryEnabled, setIsCategoryEnabled] = React.useState(false);
   const [isKeywordsEnabled, setIsKeywordsEnabled] = React.useState(false);
@@ -58,6 +59,7 @@ const PostEditor = () => {
         keywords: post.keywords.join(","),
         category: post.category,
         coverImage: post.cover_img,
+        is_published: post.is_published,
       });
       setIsLoading(false);
     }
@@ -96,6 +98,10 @@ const PostEditor = () => {
 
   const handleChange = (e) => {
     setState({ ...state, [e.target.name]: e.target.value });
+  };
+
+  const handleBack = () => {
+    navigate("/");
   };
 
   const handleSubmit = (e) => {
@@ -175,6 +181,28 @@ const PostEditor = () => {
                 Delete
               </button>
             )}
+
+            {/* publish button */}
+            <div className="flex items-center">
+              <label
+                for="default-toggle"
+                className="inline-flex relative items-center  cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  value={state.is_published}
+                  onChange={(e) =>
+                    setState({ ...state, is_published: e.target.checked })
+                  }
+                  id="default-toggle"
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                  Publish
+                </span>
+              </label>
+            </div>
             {/* save button  */}
             <button
               className="bg-blue-500 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold py-2 px-4 rounded"
@@ -183,9 +211,13 @@ const PostEditor = () => {
             >
               Save
             </button>
-            {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Publish
-            </button> */}
+            <button
+              className=" hover:bg-blue-200 border border-blue-500 disabled:bg-gray-500 text-blue-500 font-bold py-2 px-4 rounded"
+              onClick={handleBack}
+              disabled={isLoading}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </nav>

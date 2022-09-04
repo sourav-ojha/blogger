@@ -5,8 +5,11 @@ import { usePost } from "../../context/postContext";
 import { Avatar } from "flowbite-react";
 import { AiOutlineLike } from "react-icons/ai";
 import { marked } from "marked";
+import { BiShare } from "react-icons/bi";
 import { useAuth } from "../../context/AuthContext";
 import Swal from "sweetalert2";
+import { FRONT_URL } from "../../constants";
+
 const PostViewer = () => {
   const params = useParams();
   const { user } = useAuth();
@@ -33,6 +36,16 @@ const PostViewer = () => {
         }
       });
     } else likePost(post.post_id);
+  };
+
+  const handleShare = () => {
+    // share to clipboard
+    navigator.clipboard.writeText(`${FRONT_URL}${post.url}`);
+    Swal.fire({
+      title: "Copied to clipboard",
+      text: "Share this link with your friends",
+      icon: "success",
+    });
   };
 
   return (
@@ -91,13 +104,21 @@ const PostViewer = () => {
                 </p>
               </div>
             </div>
-            <div className="flex gap-3 pt-4 items-center">
-              {/* like button */}
-              <button
-                className="flex gap-2 items-center text-sm text-blue-700 p-2 rounded-sm border "
+            <div className="flex gap-3 items-center">
+              {/* like */}
+              <div
+                className="flex items-center gap-1 text-blue-700 hover:text-blue-500 cursor-pointer  "
                 onClick={handleLike}
               >
-                <AiOutlineLike className="text-xl" /> {post.like_count}
+                <AiOutlineLike className="text-xl" />
+                <p>{post.like_count}</p>
+              </div>
+              {/* share button */}
+              <button
+                className="flex items-center gap-1 text-blue-700 hover:text-blue-500 cursor-pointer  "
+                onClick={handleShare}
+              >
+                Share <BiShare />
               </button>
             </div>
           </div>

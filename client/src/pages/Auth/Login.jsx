@@ -165,7 +165,7 @@ const Login = () => {
           <span className="ml-2">
             You don't have an account?
             <span className="text-xs ml-2 text-blue-500 font-semibold">
-              sign up
+              Sign up
             </span>
           </span>
         </Link>

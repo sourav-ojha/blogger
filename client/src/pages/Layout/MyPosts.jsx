@@ -9,6 +9,8 @@ import { AiOutlineDelete, AiOutlineLike } from "react-icons/ai";
 import { BiEdit } from "react-icons/bi";
 import Swal from "sweetalert2";
 import { useAuth } from "../../context/AuthContext";
+import { BiShare } from "react-icons/bi";
+import { FRONT_URL } from "../../constants";
 
 export const BlogPostCard = ({ post }) => {
   const { likePost, deletePost } = usePost();
@@ -62,6 +64,16 @@ export const BlogPostCard = ({ post }) => {
       if (result.isConfirmed) {
         deletePost(post_id);
       }
+    });
+  };
+
+  const handleShare = () => {
+    // share to clipboard
+    navigator.clipboard.writeText(`${FRONT_URL}${url}`);
+    Swal.fire({
+      title: "Copied to clipboard",
+      text: "Share this link with your friends",
+      icon: "success",
     });
   };
 
@@ -138,13 +150,22 @@ export const BlogPostCard = ({ post }) => {
           >
             Continue Reading
           </Link>
-          {/* like */}
-          <div
-            className="flex items-center gap-1 text-blue-700 hover:text-blue-500 cursor-pointer  "
-            onClick={handleLike}
-          >
-            <AiOutlineLike className="text-xl " />
-            <p>{like_count}</p>
+          <div className="flex gap-3 items-center">
+            {/* like */}
+            <div
+              className="flex items-center gap-1 text-blue-700 hover:text-blue-500 cursor-pointer  "
+              onClick={handleLike}
+            >
+              <AiOutlineLike className="text-xl " />
+              <p>{like_count}</p>
+            </div>
+            {/* share button */}
+            <button
+              className="flex items-center gap-1 text-blue-700 hover:text-blue-500 cursor-pointer  "
+              onClick={handleShare}
+            >
+              Share <BiShare />
+            </button>
           </div>
         </div>
         {/* empty for gap  */}

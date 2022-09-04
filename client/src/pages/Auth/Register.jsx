@@ -174,7 +174,7 @@ const Register = () => {
           <span className="ml-2">
             Already have an account?
             <span className="text-xs ml-2 text-blue-500 font-semibold">
-              signin now
+              Signin now
             </span>
           </span>
         </Link>
